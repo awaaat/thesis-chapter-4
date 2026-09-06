@@ -1,0 +1,12 @@
+{
+  "name": "ThesisDataAnalysis.com",
+  "short_name": "ThesisDataAnalysis",
+  "description": "Chapter 4 dissertation data analysis, SPSS statistics, and APA results chapter support for graduate students.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
