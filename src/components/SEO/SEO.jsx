@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 
-const SITE_URL = "https://www.thesisdataanalysis.com";
+const SITE_URL = "https://thesis.scapedatasolutions.com";
 const SITE_NAME = "ThesisDataAnalysis.com";
 const DEFAULT_IMAGE = `${SITE_URL}/og-default.jpg`;
 const CONTACT_EMAIL = "info@thesisdataanalysis.com";
