@@ -5,13 +5,14 @@ import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-mot
 import {
   ArrowRight, ClipboardCheck, ListChecks, BarChart3, ShieldCheck, Table2, Brain,
   ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Star, GraduationCap,
-  Users, Award, Clock, HeartHandshake, Lock, MessageCircle, CheckCircle2,
+  Users, Award, Clock, HeartHandshake, Lock, MessageCircle, CheckCircle2, Mail,
 } from "lucide-react";
 import SEO from "../../components/SEO/SEO";
 import styles from "./HomePage.module.css";
 
 const CONTACT_URL = "https://www.scapedatasolutions.com/contact";
 const PORTAL_URL = "https://portal.scapedatasolutions.com/";
+const EMAIL = "info@scapedatasolutions.com";
 
 const ROTATING_WORDS = ["Clear Results", "Defensible Findings", "APA-Ready Tables", "Confident Defenses", "Answers You Understand"];
 
@@ -276,6 +277,19 @@ const fadeUp = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, tra
 const stagger = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.08 } } };
 const VIEWPORT = { once: false, amount: 0.2 };
 
+/* ---------- shared email CTA ---------- */
+function EmailCta({ children }) {
+  return (
+    <a href={`mailto:${EMAIL}`} className={styles.emailRow}>
+      <span className={styles.emailRowIcon}><Mail size={15} /></span>
+      <span>
+        {children || "Prefer email? Write to us at "}
+        <span className={styles.emailRowMail}>{EMAIL}</span>
+      </span>
+    </a>
+  );
+}
+
 export default function HomePage() {
   const reduceMotion = useReducedMotion();
   const [testi, setTesti] = useState(0);
@@ -363,6 +377,7 @@ export default function HomePage() {
                   Get a Free Quote
                 </a>
               </div>
+              <EmailCta />
               <div className={styles.trustRow}>
                 {["APA 7", "SPSS", "R", "Stata"].map((b) => (
                   <span key={b} className={styles.trustBadge}>{b}</span>
@@ -454,9 +469,12 @@ export default function HomePage() {
             <h2 className={styles.orderStripTitle}>Have your dataset ready?</h2>
             <p className={styles.orderStripSub}>Submit it through the client portal and we start scoping within one business day.</p>
           </div>
-          <div className={styles.heroBtnRow}>
-            <a href={PORTAL_URL} target="_blank" rel="noopener noreferrer" className={styles.btnPrimary}>Submit a Project <ArrowRight size={16} /></a>
-            <a href={CONTACT_URL} target="_blank" rel="noopener noreferrer" className={styles.btnSecondary}>Ask a Question First</a>
+          <div className={styles.orderActions}>
+            <div className={styles.heroBtnRow}>
+              <a href={PORTAL_URL} target="_blank" rel="noopener noreferrer" className={styles.btnPrimary}>Submit a Project <ArrowRight size={16} /></a>
+              <a href={CONTACT_URL} target="_blank" rel="noopener noreferrer" className={styles.btnSecondary}>Ask a Question First</a>
+            </div>
+            <EmailCta>Or just email your files to </EmailCta>
           </div>
         </div>
       </section>
@@ -553,6 +571,9 @@ export default function HomePage() {
               </motion.li>
             ))}
           </motion.ul>
+          <div className={styles.emailCenterWrap}>
+            <EmailCta>Not sure which service you need? Email </EmailCta>
+          </div>
         </div>
       </motion.section>
 
@@ -792,6 +813,9 @@ export default function HomePage() {
             <Lock size={16} />
             <span>Your dataset, topic, and files stay confidential, never resold, never reused.</span>
           </div>
+          <div className={styles.emailCenterWrap}>
+            <EmailCta>Send your dataset to </EmailCta>
+          </div>
         </div>
       </motion.section>
 
@@ -811,6 +835,9 @@ export default function HomePage() {
                 </div>
               </div>
             ))}
+          </div>
+          <div className={styles.emailCenterWrap}>
+            <EmailCta>Still have a question? Email </EmailCta>
           </div>
         </div>
       </motion.section>
@@ -832,6 +859,9 @@ export default function HomePage() {
         <div className={styles.heroBtnRow} style={{ justifyContent: "center" }}>
           <a href={PORTAL_URL} target="_blank" rel="noopener noreferrer" className={styles.btnPrimary}>Start My Order <ArrowRight size={16} /></a>
           <a href={CONTACT_URL} target="_blank" rel="noopener noreferrer" className={styles.btnSecondaryLight}>Contact Us</a>
+        </div>
+        <div className={styles.emailCenterWrap}>
+          <EmailCta>Or email us directly at </EmailCta>
         </div>
       </motion.section>
 

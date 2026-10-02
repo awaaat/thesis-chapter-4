@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Mail } from "lucide-react";
 import styles from "./Navbar.module.css";
 
 // This site is a child of scapedatasolutions.com. Only Home and Services
 // are unique here — About and Contact route back to the parent site's
 // contact page rather than duplicating content this site doesn't own.
 const PARENT_CONTACT_URL = "https://www.scapedatasolutions.com/contact";
+const EMAIL = "info@scapedatasolutions.com";
 
 export default function Navbar({ activeNav = "" }) {
   const [open, setOpen] = useState(false);
@@ -59,6 +60,12 @@ export default function Navbar({ activeNav = "" }) {
               </a>
             )
           )}
+
+          <a href={`mailto:${EMAIL}`} className={styles.emailLink}>
+            <Mail size={15} />
+            {EMAIL}
+          </a>
+
           <Link to="/order-now" className={styles.cta}>Order Now</Link>
         </nav>
 
@@ -99,6 +106,12 @@ export default function Navbar({ activeNav = "" }) {
             </a>
           )
         )}
+
+        <a href={`mailto:${EMAIL}`} className={styles.mobileEmail}>
+          <Mail size={17} />
+          {EMAIL}
+        </a>
+
         <Link to="/order-now" className={styles.mobileCta}>Order Now</Link>
       </nav>
     </header>

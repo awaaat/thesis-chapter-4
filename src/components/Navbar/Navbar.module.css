@@ -36,7 +36,7 @@
 }
 
 /* ---------- desktop nav ---------- */
-.nav { display: flex; align-items: center; gap: 36px; }
+.nav { display: flex; align-items: center; gap: 28px; }
 .link {
   color: var(--color-text-secondary);
   text-decoration: none;
@@ -46,6 +46,27 @@
 }
 .link:hover { color: var(--color-text); }
 .linkActive { color: var(--color-text); font-weight: 600; }
+
+/* ---------- navbar email CTA ---------- */
+.emailLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border: 1px solid rgba(184, 134, 44, 0.38);
+  border-radius: 999px;
+  color: var(--color-accent);
+  background: rgba(184, 134, 44, 0.07);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.emailLink:hover {
+  background: rgba(184, 134, 44, 0.15);
+  border-color: var(--color-accent);
+}
 
 .cta {
   background: var(--color-text);
@@ -87,7 +108,7 @@
   transition: max-height 0.3s ease, padding 0.3s ease, border-color 0.3s ease;
 }
 .mobilePanelOpen {
-  max-height: 320px;
+  max-height: 460px;
   padding: 10px 24px 20px;
   border-top-color: var(--color-border);
 }
@@ -103,6 +124,24 @@
 .mobileLink:last-of-type { border-bottom: none; }
 .mobileLinkActive { color: var(--color-text); font-weight: 600; }
 
+/* ---------- mobile email CTA ---------- */
+.mobileEmail {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 16px;
+  padding: 13px 18px;
+  border: 1px solid var(--color-accent);
+  border-radius: 999px;
+  color: var(--color-accent);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  word-break: break-all;
+  text-align: center;
+}
+
 .mobileCta {
   margin-top: 14px;
   text-align: center;
@@ -113,6 +152,11 @@
   font-weight: 500;
   font-size: 1rem;
   text-decoration: none;
+}
+
+/* Hide the email pill once the nav gets tight; it lives in the mobile panel. */
+@media (max-width: 1100px) {
+  .emailLink { display: none; }
 }
 
 @media (max-width: 720px) {
