@@ -1,0 +1,318 @@
+import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import SEO from "../../components/SEO/SEO";
+import hStyles from "../Home/HomePage.module.css";
+import LandingContact from "./LandingContact";
+import { landingPages, getPage, SITE, BRAND, LOGO_PNG, CATEGORIES } from "./landingData";
+import s from "./LandingPage.module.css";
+
+const cx = (...a) => a.filter(Boolean).join(" ");
+
+const ORDER = ["problems", "steps", "deliver", "example", "guide", "mistakes", "faq", "related"];
+const LABELS = {
+  problems: "Does this sound like you?",
+  steps: "How we work on it",
+  deliver: "What you receive",
+  example: "What the output looks like",
+  mistakes: "Mistakes that get chapters sent back",
+  faq: "Questions students ask",
+  related: "Related help",
+};
+
+/* One entry per page: theme (colours + fonts), hero, heading style, and a different
+   presentation for every block. Nothing is shared between neighbouring pages. */
+const LAYOUT = {
+  "spss-data-analysis-help": { theme: "paper", hero: "split", head: "num", problems: "notes", steps: "rail", deliver: "ticks", example: "rule", guide: "rule", mistakes: "list", faq: "acc" },
+  "thesis-data-analysis-help": { theme: "academic", hero: "left", head: "rule", toc: true, problems: "big", steps: "big", deliver: "rows", example: "rule", guide: "rule", mistakes: "big", faq: "grid",
+    order: ["problems", "steps", "example", "deliver", "guide", "mistakes", "faq", "related"], labels: { problems: "Where students get stuck", steps: "From proposal to defence" } },
+  "research-data-cleaning-service": { theme: "slate", hero: "term", head: "tag", problems: "log", steps: "line", deliver: "tree", example: "term", guide: "sheet", mistakes: "split", faq: "acc",
+    order: ["problems", "example", "steps", "deliver", "guide", "mistakes", "faq", "related"], labels: { problems: "What the raw file looks like", example: "Issues found in a typical export" } },
+  "questionnaire-data-analysis-help": { theme: "coral", hero: "center", head: "plain", problems: "chat", steps: "circles", deliver: "chips", example: "rule", guide: "rule", mistakes: "flags", faq: "chat",
+    labels: { problems: "What students tell us", faq: "Ask away" } },
+  "excel-statistical-analysis-help": { theme: "sheet", hero: "sheet", head: "tag", problems: "check", steps: "stairs", deliver: "tiles", example: "sheet", guide: "sheet", mistakes: "split", faq: "grid",
+    order: ["problems", "deliver", "steps", "example", "guide", "mistakes", "faq", "related"] },
+  "research-results-interpretation": { theme: "plum", hero: "band", head: "plain", problems: "notes", steps: "line", deliver: "rows", example: "rule", guide: "rule", mistakes: "flags", faq: "chat",
+    order: ["problems", "example", "steps", "guide", "deliver", "mistakes", "faq", "related"], labels: { example: "A table, read line by line" } },
+  "regression-analysis-help": { theme: "night", hero: "dark", head: "tag", toc: true, problems: "log", steps: "big", deliver: "tiles", example: "term", guide: "sheet", mistakes: "big", faq: "acc" },
+  "chapter-4-results-writing-help": { theme: "ink", hero: "left", head: "num", toc: true, problems: "dash", steps: "line", deliver: "ticks", example: "sheet", guide: "rule", mistakes: "split", faq: "grid",
+    order: ["problems", "example", "steps", "deliver", "guide", "mistakes", "faq", "related"], labels: { example: "A Chapter 4 skeleton" } },
+  "likert-scale-data-analysis": { theme: "rose", hero: "split", head: "plain", problems: "chat", steps: "stairs", deliver: "chips", example: "rule", guide: "rule", mistakes: "big", faq: "acc",
+    order: ["problems", "guide", "steps", "deliver", "example", "mistakes", "faq", "related"] },
+  "cronbach-alpha-reliability-analysis": { theme: "sky", hero: "band", head: "rule", problems: "check", steps: "circles", deliver: "rows", example: "sheet", guide: "rule", mistakes: "flags", faq: "grid",
+    order: ["problems", "example", "guide", "steps", "deliver", "mistakes", "faq", "related"] },
+  "factor-analysis-spss-help": { theme: "violet", hero: "dark", head: "num", toc: true, problems: "notes", steps: "line", deliver: "tiles", example: "term", guide: "sheet", mistakes: "list", faq: "chat" },
+  "mediation-moderation-analysis-help": { theme: "lavender", hero: "center", head: "tag", problems: "big", steps: "rail", deliver: "tree", example: "rule", guide: "sheet", mistakes: "split", faq: "acc",
+    order: ["problems", "guide", "steps", "example", "deliver", "mistakes", "faq", "related"] },
+  "sem-amos-smartpls-help": { theme: "blueprint", hero: "term", head: "tag", toc: true, problems: "check", steps: "stairs", deliver: "tiles", example: "term", guide: "sheet", mistakes: "flags", faq: "grid" },
+  "kobotoolbox-odk-data-analysis-help": { theme: "field", hero: "band", head: "rule", problems: "dash", steps: "big", deliver: "tree", example: "sheet", guide: "rule", mistakes: "list", faq: "chat",
+    order: ["problems", "example", "steps", "deliver", "guide", "mistakes", "faq", "related"] },
+  "sample-size-calculation-help": { theme: "tomato", hero: "split", head: "num", problems: "log", steps: "circles", deliver: "rows", example: "rule", guide: "sheet", mistakes: "big", faq: "acc",
+    order: ["problems", "guide", "example", "steps", "deliver", "mistakes", "faq", "related"] },
+};
+const FALLBACK = { theme: "paper", hero: "left", head: "num", problems: "dash", steps: "rail", deliver: "ticks", example: "rule", guide: "rule", mistakes: "list", faq: "acc" };
+
+function Table({ head, rows, v = "rule" }) {
+  const sheet = v === "sheet";
+  return (
+    <div className={s.tableWrap}>
+      <table className={cx(s.table, s["tb_" + v])}>
+        <thead>
+          {sheet && <tr className={s.letters}><th />{head.map((_, i) => <th key={i}>{String.fromCharCode(65 + i)}</th>)}</tr>}
+          <tr>{sheet && <th className={s.rn}>1</th>}{head.map((h, i) => <th key={i}>{h}</th>)}</tr>
+        </thead>
+        <tbody>
+          {rows.map((r, i) => (
+            <tr key={i}>{sheet && <td className={s.rn}>{i + 2}</td>}{r.map((c, j) => <td key={j}>{c}</td>)}</tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function Sec({ id, n, title, head, children }) {
+  return (
+    <section id={`sec-${id}`} className={s.section}>
+      <h2 className={cx(s.h2, s["hd_" + head])}>
+        {head === "num" && <span className={s.num}>{String(n).padStart(2, "0")}</span>}
+        {title}
+      </h2>
+      {children}
+    </section>
+  );
+}
+
+function Crumbs({ page }) {
+  return (
+    <nav aria-label="Breadcrumb" className={s.crumbs}>
+      <Link to="/">Home</Link> / <Link to="/data-analysis-services">Services</Link> / <span>{page.short}</span>
+    </nav>
+  );
+}
+
+function Hero({ page, v }) {
+  const ex = page.example;
+  const body = (
+    <>
+      <Crumbs page={page} />
+      {v === "band" ? <p className={s.bandWord}>{page.eyebrow}</p> : <p className={s.eyebrow}>{page.eyebrow}</p>}
+      <h1 className={s.title}>{page.h1}</h1>
+      <p className={s.lead}>{page.intro}</p>
+      <div className={s.ctaRow}>
+        <a href="#request" className={s.btn}>Get a free quote</a>
+        <a href="#sec-example" className={s.link}>See what the output looks like</a>
+      </div>
+      <p className={s.trust}>Free quote before you pay · Confidential files · Revisions for supervisor feedback</p>
+    </>
+  );
+  if (v === "split") {
+    return (
+      <header className={cx(s.hero, s.hero_split)}>
+        <div className={cx(s.wrap, s.splitGrid)}>
+          <div>{body}</div>
+          <aside className={s.peek} aria-label="Sample output">
+            <p className={s.peekTag}>Sample output</p>
+            <Table head={ex.head} rows={ex.rows} v="rule" />
+            <p className={s.peekNote}>Illustrative, not client data</p>
+          </aside>
+        </div>
+      </header>
+    );
+  }
+  if (v === "term") {
+    return (
+      <header className={cx(s.hero, s.hero_term)}>
+        <div className={s.wrap}>
+          <div className={s.termWin}>
+            <div className={s.termBar}><i /><i /><i /><span>{page.slug}.sh</span></div>
+            <div className={s.termBody}>
+              <p className={s.prompt}>$ scape analyse --topic "{page.short}"</p>
+              {body}
+            </div>
+          </div>
+        </div>
+      </header>
+    );
+  }
+  if (v === "sheet") {
+    return (
+      <header className={cx(s.hero, s.hero_sheet)}>
+        <div className={s.colstrip} aria-hidden="true">{"ABCDEFGHIJKLMNOP".split("").map((c) => <span key={c}>{c}</span>)}</div>
+        <div className={s.wrap}>
+          <div className={s.fbar} aria-hidden="true"><b>fx</b><span>=ANALYSE("{page.short}")</span></div>
+          {body}
+        </div>
+      </header>
+    );
+  }
+  return <header className={cx(s.hero, s["hero_" + v])}><div className={s.wrap}>{body}</div></header>;
+}
+
+export function LandingPage({ page }) {
+  const url = `${SITE}/${page.slug}`;
+  const cfg = LAYOUT[page.slug] || FALLBACK;
+  const order = cfg.order || ORDER;
+  const labels = { ...LABELS, ...(cfg.labels || {}), guide: page.guide.title };
+  const related = page.related.map(getPage).filter(Boolean);
+
+  useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, [page.slug]);
+
+  const ld = [
+    {
+      "@context": "https://schema.org", "@type": "Service",
+      name: page.short, serviceType: page.short, description: page.description, url,
+      provider: { "@type": "Organization", name: BRAND, url: SITE, logo: `${SITE}${LOGO_PNG}` },
+      areaServed: "Worldwide",
+    },
+    {
+      "@context": "https://schema.org", "@type": "FAQPage",
+      mainEntity: page.faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+    },
+  ];
+  const crumbs = [
+    { name: "Home", path: "/" },
+    { name: "Data Analysis Services", path: "/data-analysis-services" },
+    { name: page.short, path: `/${page.slug}` },
+  ];
+
+  const blocks = {
+    problems: <ul className={cx(s.list, s["pb_" + cfg.problems])}>{page.problems.map((p) => <li key={p}>{p}</li>)}</ul>,
+    steps: (
+      <ol className={cx(s.list, s["st_" + cfg.steps])}>
+        {page.steps.map((x, i) => (
+          <li key={x.t}><span className={s.stn}>{i + 1}</span><div><h3>{x.t}</h3><p>{x.d}</p></div></li>
+        ))}
+      </ol>
+    ),
+    deliver: <ul className={cx(s.list, s["dl_" + cfg.deliver])}>{page.deliverables.map((d) => <li key={d}>{d}</li>)}</ul>,
+    example: (
+      <>
+        <p className={s.setup}>{page.example.setup}</p>
+        <Table head={page.example.head} rows={page.example.rows} v={cfg.example} />
+        <p className={s.note}>{page.example.note}</p>
+      </>
+    ),
+    guide: <Table head={page.guide.head} rows={page.guide.rows} v={cfg.guide} />,
+    mistakes: (
+      <ol className={cx(s.list, s["ms_" + cfg.mistakes])}>
+        {page.mistakes.map((m) => <li key={m.t}><strong>{m.t}</strong><p>{m.d}</p></li>)}
+      </ol>
+    ),
+    faq: (
+      <div className={cx(s.faqs, s["fq_" + cfg.faq])}>
+        {page.faqs.map((f) => (
+          <details key={f.q} open={cfg.faq !== "acc"}>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    ),
+    related: (
+      <ul className={s.related}>
+        {related.map((r) => <li key={r.slug}><Link to={`/${r.slug}`}>{r.short}</Link></li>)}
+        <li><Link to="/data-analysis-services">All services</Link></li>
+      </ul>
+    ),
+  };
+
+  const sections = order.map((k, i) => (
+    <Sec key={k} id={k} n={i + 1} title={labels[k]} head={cfg.head}>{blocks[k]}</Sec>
+  ));
+
+  return (
+    <div className={hStyles.page}>
+      <SEO
+        title={page.title}
+        description={page.description}
+        path={`/${page.slug}`}
+        keywords={page.keywords}
+        image={`${SITE}/og/${page.slug}.png`}
+        imageAlt={page.short}
+        breadcrumbs={crumbs}
+        jsonLd={ld}
+      />
+
+      <main className={hStyles.mainContent} style={{ paddingTop: 0 }}>
+        <div className={cx(s.root, s["th_" + cfg.theme])}>
+          <Hero page={page} v={cfg.hero} />
+          {cfg.toc ? (
+            <div className={cx(s.wrap, s.tocGrid)}>
+              <aside className={s.toc}>
+                <nav aria-label="On this page">
+                  <p>On this page</p>
+                  {order.map((k) => <a key={k} href={`#sec-${k}`}>{labels[k]}</a>)}
+                  <a href="#request" className={s.tocCta}>Get a free quote</a>
+                </nav>
+              </aside>
+              <div>{sections}</div>
+            </div>
+          ) : (
+            <div className={s.wrap}>{sections}</div>
+          )}
+          <div className={s.wrap}><LandingContact page={page} /></div>
+          <a href="#request" className={s.float}>Get a quote</a>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+export function ServicesHub() {
+  const title = "Data Analysis Help for Students & Researchers | Scape Data Solutions";
+  const desc = "SPSS, thesis statistics, data cleaning, Likert scales, reliability, factor analysis, regression, mediation, SEM and more. Pick your topic and request a free quote.";
+  useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, []);
+  let n = 0;
+  const hubLd = {
+    "@context": "https://schema.org", "@type": "CollectionPage",
+    name: title, description: desc, url: `${SITE}/data-analysis-services`,
+    mainEntity: { "@type": "ItemList", itemListElement: landingPages.map((p, i) => ({ "@type": "ListItem", position: i + 1, name: p.short, url: `${SITE}/${p.slug}` })) },
+  };
+  return (
+    <div className={hStyles.page}>
+      <SEO
+        title={title}
+        description={desc}
+        path="/data-analysis-services"
+        keywords="data analysis help, SPSS help, thesis statistics, dissertation data analysis, Likert scale analysis, SEM, regression help"
+        image={`${SITE}/og-default.jpg`}
+        breadcrumbs={[{ name: "Home", path: "/" }, { name: "Data Analysis Services", path: "/data-analysis-services" }]}
+        jsonLd={hubLd}
+      />
+      <main className={hStyles.mainContent} style={{ paddingTop: 0 }}>
+        <div className={cx(s.root, s.th_ink)}>
+          <header className={cx(s.hero, s.hero_left)}>
+            <div className={s.wrap}>
+              <p className={s.eyebrow}>Thesis and research support</p>
+              <h1 className={s.title}>Data analysis help for students and researchers</h1>
+              <p className={s.lead}>Pick the problem you are stuck on. Each page explains what we do, shows what the output looks like and ends with a free quote.</p>
+            </div>
+          </header>
+          <div className={s.wrap}>
+            {CATEGORIES.map((c) => (
+              <section key={c.id} className={s.section}>
+                <h2 className={cx(s.h2, s.hd_tag)}>{c.title}</h2>
+                <ol className={s.index}>
+                  {landingPages.filter((p) => p.category === c.id).map((p) => {
+                    n += 1;
+                    return (
+                      <li key={p.slug}>
+                        <span>{String(n).padStart(2, "0")}</span>
+                        <Link to={`/${p.slug}`}>{p.short}</Link>
+                        <p>{p.description}</p>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </section>
+            ))}
+            <LandingContact />
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+
+export default LandingPage;

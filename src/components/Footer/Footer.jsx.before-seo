@@ -1,6 +1,4 @@
 import { Mail } from "lucide-react";
-import { Link } from "react-router-dom";
-import { landingPages } from "../../pages/Landing/landingData";
 import styles from "./Footer.module.css";
 
 const EMAIL = "info@scapedatasolutions.com";
@@ -12,15 +10,6 @@ export default function Footer() {
         <Mail size={18} />
         <span>{EMAIL}</span>
       </a>
-
-      <nav className={styles.footerLinks} aria-label="Thesis and data analysis support">
-        <Link to="/data-analysis-services" className={styles.footerLinksTitle}>Thesis &amp; data analysis support</Link>
-        <ul>
-          {landingPages.map((p) => (
-            <li key={p.slug}><Link to={`/${p.slug}`}>{p.short}</Link></li>
-          ))}
-        </ul>
-      </nav>
 
       <p className={styles.footerNote}>
         © {new Date().getFullYear()} ThesisDataAnalysis.com — A Scape Data Solutions company. All rights reserved.

@@ -1,0 +1,248 @@
+export const SITE = "https://thesis.scapedatasolutions.com";
+export const BRAND = "Scape Data Solutions";
+export const LOGO = "/Images/site-images/logo.svg";
+export const LOGO_PNG = "/Images/site-images/logo-image.png";
+
+export const landingPages = [
+  {
+    slug: "spss-data-analysis-help",
+    short: "SPSS Data Analysis Help",
+    title: "SPSS Data Analysis Help for Thesis & Dissertations | Scape Data Solutions",
+    description:
+      "Need SPSS data analysis help? Upload your dataset and get t-tests, ANOVA, regression, reliability and correlation done with clear output and interpretation. Free quote.",
+    keywords: "SPSS data analysis help, SPSS help for students, SPSS thesis analysis, SPSS assignment help, hire SPSS expert",
+    h1: "SPSS Data Analysis Help for Your Thesis or Dissertation",
+    intro:
+      "Stuck on SPSS output you can't make sense of? Send us your dataset and research questions and we'll run the right tests, format the tables, and explain what the numbers mean in plain language.",
+    problems: [
+      "You don't know which statistical test fits your research objectives",
+      "Your SPSS output is full of tables and you can't tell which ones matter",
+      "Assumption checks (normality, homogeneity, multicollinearity) are failing",
+      "Your supervisor sent the analysis back with corrections",
+      "Your deadline is close and the analysis chapter is still empty",
+    ],
+    deliverables: [
+      "Descriptive statistics, frequencies and cross-tabulations",
+      "T-tests, ANOVA, chi-square, Mann-Whitney and Kruskal-Wallis",
+      "Pearson and Spearman correlation, linear and logistic regression",
+      "Cronbach's alpha reliability and factor analysis",
+      "APA-style tables plus the cleaned .sav file and syntax",
+      "A plain-English explanation of every result",
+    ],
+    faqs: [
+      { q: "Which SPSS tests can you run?", a: "We handle descriptive statistics, parametric and non-parametric tests, correlation, regression (linear, multiple, logistic), reliability, factor analysis and more. If you're unsure which test suits your objectives, we'll recommend one." },
+      { q: "What do I need to send?", a: "Your dataset (SPSS, Excel or CSV), your research objectives or hypotheses, and any supervisor feedback. A questionnaire or codebook helps if you have it." },
+      { q: "Can I get the SPSS file and syntax back?", a: "Yes. You receive the output, formatted tables, the working .sav file and the syntax so you can reproduce and defend the analysis." },
+    ],
+    related: ["thesis-data-analysis-help", "regression-analysis-help", "research-results-interpretation"],
+  },
+  {
+    slug: "thesis-data-analysis-help",
+    short: "Thesis Data Analysis Help",
+    title: "Thesis Data Analysis Help | Statistical Analysis for Research | Scape Data",
+    description:
+      "Professional thesis data analysis help for masters and PhD students. Statistical testing, tables, charts and interpretation matched to your objectives. Request a free quote today.",
+    keywords: "thesis data analysis help, dissertation statistical analysis, research data analysis service, masters thesis statistics, PhD data analysis help",
+    h1: "Thesis Data Analysis Help From Data to Defensible Results",
+    intro:
+      "Your thesis lives or dies on its analysis chapter. We help you choose the right methods, run them correctly, and present the findings so they hold up in front of your supervisor and panel.",
+    problems: [
+      "Your methodology says one thing but you aren't sure how to execute it",
+      "You have data but no clear plan for answering each objective",
+      "Your supervisor wants a stronger statistical justification",
+      "You're unsure how to report results consistently across tables and text",
+    ],
+    deliverables: [
+      "An analysis plan mapped objective by objective",
+      "Correctly executed tests with assumption checks",
+      "Publication-quality tables and charts",
+      "Written interpretation you can adapt for Chapter 4",
+      "Guidance for answering likely viva questions on your methods",
+    ],
+    faqs: [
+      { q: "Do you work with masters and PhD theses?", a: "Yes. We support undergraduate, masters and doctoral research across social sciences, health, business, education and more." },
+      { q: "Can you work from my existing methodology chapter?", a: "Absolutely. Share it and we'll align the analysis to the design, sampling and variables you've already described." },
+      { q: "How fast can you deliver?", a: "Timelines depend on dataset size and complexity. Tell us your deadline in the request form and we'll confirm what's achievable before you pay." },
+    ],
+    related: ["spss-data-analysis-help", "chapter-4-results-writing-help", "questionnaire-data-analysis-help"],
+  },
+  {
+    slug: "research-data-cleaning-service",
+    short: "Research Data Cleaning",
+    title: "Research Data Cleaning Service | Fix Messy Datasets | Scape Data Solutions",
+    description:
+      "Messy survey or research data? We clean, recode and validate datasets: missing values, duplicates, outliers and inconsistent coding. Excel, SPSS, CSV. Get a free quote.",
+    keywords: "research data cleaning service, clean survey data, data cleaning for thesis, recode SPSS data, fix messy dataset",
+    h1: "Research Data Cleaning Service Turn Messy Data Into Analysis-Ready Data",
+    intro:
+      "Bad data produces bad results. Upload your raw spreadsheet and we'll fix errors, handle missing values and standardise coding, with a log of every change so your process stays transparent.",
+    problems: [
+      "Duplicate or incomplete responses from online or field collection",
+      "Inconsistent labels like 'Male', 'male' and 'M' in one column",
+      "Missing values with no plan for handling them",
+      "Outliers and impossible values distorting your results",
+      "Data exported from Google Forms, KoboToolbox or ODK that needs restructuring",
+    ],
+    deliverables: [
+      "Cleaned dataset in Excel, CSV or SPSS format",
+      "Variable recoding, labelling and codebook",
+      "Missing data and outlier report with recommended handling",
+      "A change log documenting every edit",
+      "Reverse-coded and computed scale scores where needed",
+    ],
+    faqs: [
+      { q: "Will you change my original data?", a: "No. We always work on a copy and keep your raw file untouched, with a change log for every correction." },
+      { q: "Can you clean data from KoboToolbox, ODK or Google Forms?", a: "Yes. We regularly restructure exports from these tools into a tidy, analysis-ready format." },
+      { q: "Do you also analyse the data after cleaning?", a: "If you'd like. Many clients combine cleaning and analysis in a single request." },
+    ],
+    related: ["questionnaire-data-analysis-help", "excel-statistical-analysis-help", "spss-data-analysis-help"],
+  },
+  {
+    slug: "questionnaire-data-analysis-help",
+    short: "Questionnaire Data Analysis",
+    title: "Questionnaire & Survey Data Analysis Help | Likert Scale Analysis | Scape Data",
+    description:
+      "Get questionnaire and survey data analysis help: Likert scales, reliability, descriptive stats and hypothesis tests for your research project. Fast quotes, clear reporting.",
+    keywords: "questionnaire data analysis help, survey data analysis service, Likert scale analysis, analyse questionnaire for thesis, research survey statistics",
+    h1: "Questionnaire Data Analysis Help for Surveys and Likert-Scale Data",
+    intro:
+      "You collected the responses. Now what? We code your questionnaire, check reliability, and analyse each objective so your findings are accurate, organised and ready to write up.",
+    problems: [
+      "You don't know whether to treat Likert items as ordinal or scale data",
+      "You need means, standard deviations and interpretation of agreement levels",
+      "You need to test relationships between demographics and responses",
+      "Your questionnaire has multiple sections that need different analyses",
+    ],
+    deliverables: [
+      "Coding and data entry structure for your questionnaire",
+      "Frequencies, means and standard deviations by section",
+      "Cronbach's alpha for each construct",
+      "Cross-tabs, chi-square, correlation and group comparisons",
+      "Tables and charts formatted for your report",
+    ],
+    faqs: [
+      { q: "Can you analyse Likert-scale questions?", a: "Yes. We compute item and composite scores, report reliability, and choose appropriate tests for ordinal or interval treatment." },
+      { q: "What if my sample size is small?", a: "We'll recommend methods suited to small samples, including non-parametric options, and note limitations you should mention in your study." },
+      { q: "Can you work from a paper questionnaire?", a: "If responses are entered in Excel or any spreadsheet we can take it from there. Share the questionnaire so we can build a codebook." },
+    ],
+    related: ["research-data-cleaning-service", "spss-data-analysis-help", "research-results-interpretation"],
+  },
+  {
+    slug: "excel-statistical-analysis-help",
+    short: "Excel Statistical Analysis",
+    title: "Excel Statistical Analysis Help | Data Analysis ToolPak & Charts | Scape Data",
+    description:
+      "Excel statistical analysis help for students and researchers: descriptive stats, regression, t-tests, pivot tables and charts. Send your spreadsheet for a free quote.",
+    keywords: "Excel statistical analysis help, Excel data analysis for students, Excel regression help, Excel data analysis ToolPak, Excel assignment help",
+    h1: "Excel Statistical Analysis Help for Students and Researchers",
+    intro:
+      "Excel is powerful once the data is structured and the right functions are applied. We analyse your spreadsheet, build the formulas and charts, and explain each step so you can follow it.",
+    problems: [
+      "You don't know how to use the Data Analysis ToolPak",
+      "Formulas return errors or the wrong results",
+      "You need pivot tables, summaries or dashboards from raw data",
+      "Your assignment requires regression or hypothesis tests in Excel",
+    ],
+    deliverables: [
+      "A tidy, formula-driven workbook you can audit",
+      "Descriptive statistics, t-tests, ANOVA and regression via ToolPak",
+      "Pivot tables and clear, labelled charts",
+      "Short written explanation of each output",
+    ],
+    faqs: [
+      { q: "Can you do regression in Excel?", a: "Yes. We run simple and multiple regression using the Data Analysis ToolPak and explain coefficients, R-squared and significance." },
+      { q: "Will the workbook use live formulas?", a: "Yes, wherever sensible, so you can trace and update the calculations yourself." },
+      { q: "Can you move my analysis from Excel to SPSS?", a: "Yes. If your work needs deeper statistics, we can transfer and extend the analysis in SPSS." },
+    ],
+    related: ["research-data-cleaning-service", "regression-analysis-help", "questionnaire-data-analysis-help"],
+  },
+  {
+    slug: "research-results-interpretation",
+    short: "Research Results Interpretation",
+    title: "Research Results Interpretation Help | Explain SPSS & Statistical Output",
+    description:
+      "Don't understand your statistical output? Get clear, accurate interpretation of p-values, coefficients, ANOVA and regression results written in plain academic language.",
+    keywords: "research results interpretation, interpret SPSS output, explain regression results, interpret p-value, statistical output explained",
+    h1: "Research Results Interpretation Understand Exactly What Your Output Means",
+    intro:
+      "Already ran the tests but can't explain the results? Send your output and we'll translate it into clear findings that tie back to your objectives and hypotheses.",
+    problems: [
+      "You can see the p-value but don't know what it means for your hypothesis",
+      "You can't explain coefficients, odds ratios or effect sizes",
+      "Your results contradict your expectations and you need to discuss why",
+      "Your supervisor asked for deeper interpretation",
+    ],
+    deliverables: [
+      "Line-by-line explanation of your output tables",
+      "Written interpretation in academic style",
+      "Link between results, hypotheses and objectives",
+      "Notes on limitations and how to discuss them",
+    ],
+    faqs: [
+      { q: "Do I need to send my raw data?", a: "Not always. For interpretation alone, your output tables and research objectives are usually enough." },
+      { q: "Can you help with non-significant results?", a: "Yes. A non-significant result is still a finding. We help you report and discuss it properly." },
+      { q: "Will this help me defend my results?", a: "That's the aim. You'll understand each result well enough to explain it confidently." },
+    ],
+    related: ["chapter-4-results-writing-help", "spss-data-analysis-help", "regression-analysis-help"],
+  },
+  {
+    slug: "regression-analysis-help",
+    short: "Regression Analysis Help",
+    title: "Regression Analysis Help | Linear, Multiple & Logistic Regression | Scape Data",
+    description:
+      "Expert regression analysis help: linear, multiple, logistic and hierarchical models with assumption testing and interpretation. Send your data for a free quote.",
+    keywords: "regression analysis help, multiple regression help, logistic regression help, linear regression thesis, regression assumptions check",
+    h1: "Regression Analysis Help Linear, Multiple and Logistic Models",
+    intro:
+      "Regression is the backbone of many theses and the most common place for mistakes. We fit the model, test the assumptions, and explain every coefficient so you can report it correctly.",
+    problems: [
+      "You aren't sure which regression type matches your dependent variable",
+      "Multicollinearity, heteroscedasticity or non-normal residuals are showing up",
+      "You can't interpret coefficients, odds ratios or R-squared",
+      "You need to compare nested or hierarchical models",
+    ],
+    deliverables: [
+      "Model specification matched to your variables",
+      "Assumption diagnostics (VIF, residual plots, normality)",
+      "Coefficient tables with interpretation",
+      "Model fit statistics and comparison where needed",
+    ],
+    faqs: [
+      { q: "Which regression types do you cover?", a: "Simple, multiple, hierarchical and binary or multinomial logistic regression, plus moderation and mediation on request." },
+      { q: "What if my assumptions are violated?", a: "We'll test alternatives such as transformations, robust estimators or different model types, and explain the trade-offs." },
+      { q: "Can you work in R, Stata or Python too?", a: "Tell us your preferred software in the request form and we'll confirm availability." },
+    ],
+    related: ["spss-data-analysis-help", "research-results-interpretation", "thesis-data-analysis-help"],
+  },
+  {
+    slug: "chapter-4-results-writing-help",
+    short: "Chapter 4 Results Writing",
+    title: "Chapter 4 Results & Findings Writing Help | Dissertation Data Presentation",
+    description:
+      "Get help presenting your dissertation Chapter 4: organised results, formatted tables, charts and objective-by-objective findings. Request a quote for your findings chapter.",
+    keywords: "chapter 4 results help, dissertation findings chapter, thesis results chapter, presenting statistical results, data presentation chapter",
+    h1: "Chapter 4 Results Help Present Your Findings Clearly and Correctly",
+    intro:
+      "Your analysis is done, but turning it into a clean findings chapter is its own challenge. We help you structure results by objective, format tables and charts, and write the narrative around them.",
+    problems: [
+      "You don't know how to organise Chapter 4 objective by objective",
+      "Your tables and charts look inconsistent",
+      "You have results but struggle to describe them academically",
+      "Your supervisor wants clearer links between findings and literature",
+    ],
+    deliverables: [
+      "Chapter structure aligned to your objectives",
+      "Formatted tables and charts with correct numbering",
+      "Descriptive and inferential results explained in text",
+      "A summary of findings for your discussion chapter",
+    ],
+    faqs: [
+      { q: "Can you work from my existing analysis?", a: "Yes. Send your outputs and objectives and we'll build the chapter around them." },
+      { q: "What referencing style do you use?", a: "We follow your institution's requirement, commonly APA, Harvard or Chicago. Tell us in the request form." },
+      { q: "Do you help with the discussion chapter too?", a: "We can support discussion and conclusion sections that depend on your results. Mention it in your request." },
+    ],
+    related: ["thesis-data-analysis-help", "research-results-interpretation", "questionnaire-data-analysis-help"],
+  },
+];
+
+export const getPage = (slug) => landingPages.find((p) => p.slug === slug);

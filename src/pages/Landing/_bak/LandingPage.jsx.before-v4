@@ -1,0 +1,186 @@
+import { Helmet } from "react-helmet-async";
+import { Link, Route } from "react-router-dom";
+import { useEffect } from "react";
+import SEO from "../../components/SEO/SEO";
+import hStyles from "../Home/HomePage.module.css";
+import LandingContact from "./LandingContact";
+import { landingPages, getPage, SITE, BRAND, LOGO_PNG, CATEGORIES } from "./landingData";
+import styles from "./LandingPage.module.css";
+
+function DataTable({ head, rows }) {
+  return (
+    <div className={styles.tableWrap}>
+      <table className={styles.table}>
+        <thead><tr>{head.map((h, i) => <th key={i}>{h}</th>)}</tr></thead>
+        <tbody>
+          {rows.map((r, i) => (
+            <tr key={i}>{r.map((c, j) => <td key={j}>{c}</td>)}</tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function Section({ n, title, children }) {
+  return (
+    <section className={styles.section}>
+      <h2 className={styles.h2}><span className={styles.num}>{String(n).padStart(2, "0")}</span>{title}</h2>
+      {children}
+    </section>
+  );
+}
+
+export function LandingPage({ page }) {
+  const url = `${SITE}/${page.slug}`;
+  const related = page.related.map(getPage).filter(Boolean);
+
+  useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, [page.slug]);
+
+  const ld = [
+    {
+      "@context": "https://schema.org", "@type": "Service",
+      name: page.short, serviceType: page.short, description: page.description, url,
+      provider: { "@type": "Organization", name: BRAND, url: SITE, logo: `${SITE}${LOGO_PNG}` },
+      areaServed: "Worldwide",
+    },
+    {
+      "@context": "https://schema.org", "@type": "FAQPage",
+      mainEntity: page.faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+    },
+    {
+      "@context": "https://schema.org", "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE },
+        { "@type": "ListItem", position: 2, name: "Data Analysis Services", item: `${SITE}/data-analysis-services` },
+        { "@type": "ListItem", position: 3, name: page.short, item: url },
+      ],
+    },
+  ];
+
+  return (
+    <div className={hStyles.page}>
+      <SEO title={page.title} description={page.description} path={`/${page.slug}`} />
+      <Helmet>
+        <meta name="keywords" content={page.keywords} />
+        <meta property="og:image" content={`${SITE}${LOGO_PNG}`} />
+        <script type="application/ld+json">{JSON.stringify(ld)}</script>
+      </Helmet>
+
+      <main className={hStyles.mainContent} style={{ paddingTop: 0 }}>
+        <div className={styles.wrap}>
+          <header className={styles.hero}>
+            <nav aria-label="Breadcrumb" className={styles.crumbs}>
+              <Link to="/">Home</Link> / <Link to="/data-analysis-services">Services</Link> / <span>{page.short}</span>
+            </nav>
+            <p className={styles.eyebrow}>{page.eyebrow}</p>
+            <h1 className={styles.title}>{page.h1}</h1>
+            <p className={styles.lead}>{page.intro}</p>
+            <div className={styles.ctaRow}>
+              <a href="#request" className={styles.btn}>Get a free quote</a>
+              <a href="#example" className={styles.link}>See what the output looks like</a>
+            </div>
+            <p className={styles.trust}>Free quote before you pay · Confidential files · Revisions for supervisor feedback</p>
+          </header>
+
+          <Section n={1} title="Does this sound like you?">
+            <ul className={styles.dashList}>{page.problems.map((p) => <li key={p}>{p}</li>)}</ul>
+          </Section>
+
+          <Section n={2} title="How we work on it">
+            <ol className={styles.steps}>
+              {page.steps.map((s, i) => (
+                <li key={s.t}><span>{i + 1}</span><h3>{s.t}</h3><p>{s.d}</p></li>
+              ))}
+            </ol>
+          </Section>
+
+          <Section n={3} title="What you receive">
+            <ul className={styles.tickList}>{page.deliverables.map((d) => <li key={d}>{d}</li>)}</ul>
+          </Section>
+
+          <div id="example" />
+          <Section n={4} title="What the output looks like">
+            <p className={styles.setup}>{page.example.setup}</p>
+            <DataTable head={page.example.head} rows={page.example.rows} />
+            <p className={styles.note}>{page.example.note}</p>
+          </Section>
+
+          <Section n={5} title={page.guide.title}>
+            <DataTable head={page.guide.head} rows={page.guide.rows} />
+          </Section>
+
+          <Section n={6} title="Mistakes that get chapters sent back">
+            <ol className={styles.mistakes}>
+              {page.mistakes.map((m) => (
+                <li key={m.t}><strong>{m.t}.</strong> {m.d}</li>
+              ))}
+            </ol>
+          </Section>
+
+          <Section n={7} title="Questions students ask">
+            {page.faqs.map((f) => (
+              <details key={f.q} className={styles.faq}>
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </Section>
+
+          <Section n={8} title="Related help">
+            <ul className={styles.related}>
+              {related.map((r) => <li key={r.slug}><Link to={`/${r.slug}`}>{r.short}</Link></li>)}
+              <li><Link to="/data-analysis-services">All services</Link></li>
+            </ul>
+          </Section>
+
+          <LandingContact page={page} />
+        </div>
+      </main>
+      <a href="#request" className={styles.float}>Get a quote</a>
+    </div>
+  );
+}
+
+export function ServicesHub() {
+  const title = "Data Analysis Help for Students & Researchers | Scape Data Solutions";
+  const desc = "SPSS, thesis statistics, data cleaning, Likert scales, reliability, factor analysis, regression, mediation, SEM and more. Pick your topic and request a free quote.";
+  useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" }); }, []);
+  return (
+    <div className={hStyles.page}>
+      <SEO title={title} description={desc} path="/data-analysis-services" />
+      <main className={hStyles.mainContent} style={{ paddingTop: 0 }}>
+        <div className={styles.wrap}>
+          <header className={styles.hero}>
+            <p className={styles.eyebrow}>Thesis and research support</p>
+            <h1 className={styles.title}>Data analysis help for students and researchers</h1>
+            <p className={styles.lead}>Pick the problem you are stuck on. Each page explains what we do, shows what the output looks like and ends with a free quote.</p>
+          </header>
+          {CATEGORIES.map((c) => (
+            <section key={c.id} className={styles.section}>
+              <h2 className={styles.h2}>{c.title}</h2>
+              <ul className={styles.hubList}>
+                {landingPages.filter((p) => p.category === c.id).map((p) => (
+                  <li key={p.slug}>
+                    <Link to={`/${p.slug}`}>{p.short}</Link>
+                    <p>{p.description}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+          <LandingContact />
+        </div>
+      </main>
+    </div>
+  );
+}
+
+export function landingRoutes() {
+  return [
+    <Route key="hub" path="/data-analysis-services" element={<ServicesHub />} />,
+    ...landingPages.map((p) => <Route key={p.slug} path={`/${p.slug}`} element={<LandingPage page={p} />} />),
+  ];
+}
+
+export default LandingPage;

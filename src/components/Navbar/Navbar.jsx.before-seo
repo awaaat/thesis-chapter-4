@@ -16,7 +16,6 @@ export default function Navbar({ activeNav = "" }) {
   const links = [
     { to: "/", label: "Home", key: "home", internal: true },
     { to: "/services", label: "Services", key: "services", internal: true },
-    { to: "/data-analysis-services", label: "Thesis Support", key: "support", internal: true },
     { to: PARENT_CONTACT_URL, label: "About", key: "about", internal: false },
     { to: PARENT_CONTACT_URL, label: "Contact", key: "contact", internal: false },
   ];

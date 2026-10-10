@@ -1,0 +1,47 @@
+/* Plain typographic layout: no boxes, thin dividers only */
+.hero { padding: 3rem 0 2rem; max-width: 52rem; margin: 0 auto; text-align: center; }
+.crumbs { font-size: .85rem; color: #999; margin-bottom: 1rem; }
+.crumbs a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.title { font-size: 2.4rem; font-weight: 500; line-height: 1.1; letter-spacing: -0.03em; margin: 0 0 1rem; }
+@media (min-width: 640px)  { .title { font-size: 3.2rem; } }
+@media (min-width: 1024px) { .title { font-size: 3.8rem; } }
+.lead { font-size: 1.1rem; line-height: 1.6; color: #666; max-width: 38rem; margin: 0 auto; }
+.ctaRow { display: flex; gap: .75rem; flex-wrap: wrap; justify-content: center; margin: 1.75rem 0 1rem; }
+.btn, .btnGhost { display: inline-block; padding: .7rem 2rem; border-radius: 9999px; font-weight: 500; font-size: .95rem; text-decoration: none; transition: background .2s, color .2s; }
+.btn { background: #111; color: #fff; }
+.btn:hover { background: #1a1a2e; color: #fdb840; }
+.btnGhost { color: #111; text-decoration: underline; text-underline-offset: 4px; padding-left: 1rem; padding-right: 1rem; }
+.badges { display: flex; gap: .4rem 1.4rem; flex-wrap: wrap; justify-content: center; list-style: none; padding: 0; margin: 0; font-size: .85rem; color: #666; }
+.badges li::before { content: "✓ "; color: #fdb840; font-weight: 700; }
+
+.section { padding: 2.25rem 0; max-width: 52rem; margin: 0 auto; border-top: 1px solid #eee; }
+.section h2 { font-size: 1.7rem; font-weight: 500; letter-spacing: -0.02em; margin: 0 0 1rem; }
+
+/* plain lists */
+.checks, .cards { list-style: none; padding: 0; margin: 0; }
+.checks li { padding: .35rem 0 .35rem 1.4rem; position: relative; color: #444; font-size: .98rem; line-height: 1.55; }
+.checks li::before { content: "–"; position: absolute; left: 0; color: #fdb840; font-weight: 700; }
+
+.cards { display: grid; grid-template-columns: 1fr; gap: 0 2rem; }
+@media (min-width: 720px) { .cards { grid-template-columns: 1fr 1fr; } }
+.cards li { padding: .5rem 0 .5rem 1.4rem; position: relative; color: #333; font-size: .98rem; line-height: 1.55; }
+.cards li::before { content: "✓"; position: absolute; left: 0; color: #fdb840; font-weight: 700; }
+.cards a { color: #111; text-decoration: underline; text-underline-offset: 3px; }
+.cards p { margin: .15rem 0 0; color: #666; font-size: .9rem; }
+
+/* steps: inline numbers, no boxes */
+.steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 1.1rem; }
+.steps li { display: grid; grid-template-columns: 2rem 1fr; column-gap: .75rem; }
+.steps li span { grid-row: 1 / span 2; font-size: 1.4rem; font-weight: 500; color: #fdb840; line-height: 1.2; }
+.steps h3 { margin: 0; font-weight: 500; font-size: 1.05rem; }
+.steps p { margin: .15rem 0 0; color: #666; font-size: .93rem; line-height: 1.55; }
+
+/* faq: divider lines only */
+.faq { border-bottom: 1px solid #eee; padding: .85rem 0; }
+.faq summary { cursor: pointer; font-weight: 500; }
+.faq p { margin: .6rem 0 0; color: #666; font-size: .93rem; line-height: 1.6; }
+
+/* related: inline text links */
+.related { list-style: none; padding: 0; margin: 0; display: flex; gap: .4rem 1.5rem; flex-wrap: wrap; }
+.related a { color: #111; text-decoration: underline; text-underline-offset: 4px; font-size: .95rem; }
+.related a:hover { color: #b57a00; }

@@ -32,8 +32,3 @@
 .footerNote {
   margin: 0;
 }
-.footerLinks { max-width: 62rem; margin: 0 auto 20px; }
-.footerLinksTitle { display: inline-block; margin-bottom: 10px; color: #fff; font-weight: 600; text-decoration: none; }
-.footerLinks ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; }
-.footerLinks a { color: rgba(255, 255, 255, 0.75); text-decoration: none; font-size: 0.85rem; }
-.footerLinks a:hover { color: #fff; text-decoration: underline; }

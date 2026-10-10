@@ -1,0 +1,88 @@
+import { useEffect, useState } from "react";
+import { apiService } from "../../services/api";
+import { landingPages, SITE } from "./landingData";
+import styles from "./LandingForm.module.css";
+
+const EMPTY = { name: "", email: "", phone: "", service: "", message: "" };
+
+export default function LandingContact({ page }) {
+  const [form, setForm] = useState({ ...EMPTY, service: page ? page.short : "" });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    setForm((f) => ({ ...f, service: page ? page.short : "" }));
+  }, [page]);
+
+  const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    try {
+      const source = page ? `${SITE}/${page.slug}` : `${SITE}/data-analysis-services`;
+      await apiService.submitLead({
+        ...form,
+        company: "",
+        message: `${form.message}\n\n[Submitted from: ${source}]`,
+      });
+      setDone(true);
+    } catch (err) {
+      setError(err.message || "Failed to send. Please email info@scapedatasolutions.com");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (done) {
+    return (
+      <section id="request" className={styles.wrap}>
+        <h2 className={styles.h2}>Request received</h2>
+        <p className={styles.sub}>Thanks. We'll review your details and reply within 24 hours with a quote.</p>
+      </section>
+    );
+  }
+
+  return (
+    <section id="request" className={styles.wrap}>
+      <h2 className={styles.h2}>Request a free quote</h2>
+      <p className={styles.sub}>Tell us what you need and your deadline. We reply within 24 hours. No obligation.</p>
+
+      <form onSubmit={onSubmit} className={styles.form}>
+        {error && <div className={styles.error}>{error}</div>}
+
+        <div className={styles.row}>
+          <label>Full name *
+            <input name="name" value={form.name} onChange={onChange} required placeholder="Your name" />
+          </label>
+          <label>Email *
+            <input type="email" name="email" value={form.email} onChange={onChange} required placeholder="you@email.com" />
+          </label>
+        </div>
+
+        <div className={styles.row}>
+          <label>Phone / WhatsApp
+            <input type="tel" name="phone" value={form.phone} onChange={onChange} placeholder="+254 ..." />
+          </label>
+          <label>Service *
+            <select name="service" value={form.service} onChange={onChange} required>
+              <option value="">Select a service...</option>
+              {landingPages.map((p) => <option key={p.slug} value={p.short}>{p.short}</option>)}
+              <option value="Other">Other</option>
+            </select>
+          </label>
+        </div>
+
+        <label>Project details *
+          <textarea name="message" value={form.message} onChange={onChange} required rows={4}
+            placeholder="Your objectives, software, sample size, and deadline" />
+        </label>
+
+        <button type="submit" disabled={loading}>{loading ? "Sending..." : "Send request"}</button>
+        <p className={styles.note}>Your files and details stay confidential.</p>
+      </form>
+    </section>
+  );
+}

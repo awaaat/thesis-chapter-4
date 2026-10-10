@@ -8,7 +8,6 @@ import OrderNowPage from "./pages/OrderNow/OrderNowPage";
 import AboutPage from "./pages/About/AboutPage";
 import ContactPage from "./pages/Contact/ContactPage";
 
-import { landingRoutes } from "./pages/Landing/landingRoutes";
 export default function App() {
   return (
     <>
@@ -21,8 +20,7 @@ export default function App() {
           <Route path="/order-now" element={<OrderNowPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
-          {landingRoutes()}
-      </Routes>
+        </Routes>
       </main>
       <Footer />
     </>

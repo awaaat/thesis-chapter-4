@@ -1,0 +1,425 @@
+/* src/pages/Contact/ContactPage.module.css */
+
+.page {
+  background: #fff;
+  color: #111;
+  font-family: system-ui, -apple-system, 'Universal Sans', 'Geist Mono', sans-serif;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 2rem;
+  }
+}
+
+/* ─── HERO ────────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  padding: 8rem 0 4rem;
+  background: #fff;
+  overflow: hidden;
+}
+
+.heroContent {
+  max-width: 48rem;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.heroTitle {
+  font-size: 3.2rem;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin: 0 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .heroTitle {
+    font-size: 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .heroTitle {
+    font-size: 4.8rem;
+  }
+}
+
+.heroSubtitle {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #666;
+  max-width: 32rem;
+  margin: 0 auto;
+}
+
+/* ─── CONTACT SECTION ─────────────────────────────────────────────── */
+.contactSection {
+  padding: 4rem 0;
+  background: #fff;
+}
+
+.sectionContent {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.contactGrid {
+  display: grid;
+  gap: 3rem;
+}
+
+@media (min-width: 1024px) {
+  .contactGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+}
+
+/* ─── LEFT: Contact Info ──────────────────────────────────────────── */
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.infoTitle {
+  font-size: 2.4rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem;
+}
+
+.infoText {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.contactMethods {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contactMethod {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 0.75rem;
+  transition: border-color 0.2s;
+  background: #fafafa;
+}
+
+.contactMethod:hover {
+  border-color: #ddd;
+}
+
+.methodIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  border: 1px solid #eee;
+  background: #fff;
+  color: #666;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.methodLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #999;
+}
+
+.methodValue {
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.5;
+  margin-top: 0.1rem;
+}
+
+/* ─── Benefits ────────────────────────────────────────────────────── */
+.benefits {
+  margin-top: 2rem;
+}
+
+.benefitsTitle {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0 0 0.75rem;
+}
+
+.benefitsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.3rem 0.75rem;
+}
+
+.benefitsList li {
+  font-size: 0.9rem;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.benefitsList li::before {
+  content: "✓";
+  color: #3b82f6;
+  font-weight: 700;
+}
+
+/* ─── RIGHT: Form ──────────────────────────────────────────────────── */
+.formContainer {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 1.5rem;
+  padding: 2rem;
+}
+
+@media (max-width: 639px) {
+  .formContainer {
+    padding: 1.5rem;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* --- Form row --- */
+.formRow {
+  display: grid;
+  gap: 1.5rem;          /* Space between the two columns */
+}
+
+@media (min-width: 640px) {
+  .formRow {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;         /* Prevent overflow */
+  margin-bottom: 0.5rem; /* Extra bottom spacing between rows */
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+  box-sizing: border-box; /* Critical: prevents padding from breaking width */
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2.2rem;
+}
+
+.errorBox {
+  background: #fde8e8;
+  color: #b91c1c;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid #f5c6c6;
+  font-size: 0.9rem;
+}
+
+.submitButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 2rem;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 9999px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: #333;
+  transform: scale(1.02);
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.privacy {
+  font-size: 0.7rem;
+  color: #999;
+  text-align: center;
+  margin: 0;
+}
+
+/* ─── SUCCESS ──────────────────────────────────────────────────────── */
+.successSection {
+  padding: 6rem 0 4rem;
+  text-align: center;
+}
+
+.successContent {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.successIcon {
+  color: #22c55e;
+  margin-bottom: 1rem;
+}
+
+.successTitle {
+  font-size: 2.4rem;
+  font-weight: 500;
+  margin: 0 0 0.5rem;
+}
+
+.successText {
+  font-size: 1.05rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0 0 2rem;
+}
+
+.nextSteps {
+  background: #fafafa;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.nextSteps h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0 0 0.5rem;
+}
+
+.nextSteps ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nextSteps li {
+  padding: 0.3rem 0;
+  font-size: 0.9rem;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nextSteps li::before {
+  content: "•";
+  color: #3b82f6;
+  font-weight: 700;
+}
+
+.homeButton {
+  display: inline-block;
+  padding: 0.6rem 2rem;
+  background: #111;
+  color: #fff;
+  border-radius: 9999px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.homeButton:hover {
+  background: #333;
+  transform: scale(1.02);
+}
+
+/* ─── RESPONSIVE ──────────────────────────────────────────────────── */
+@media (max-width: 639px) {
+  .hero {
+    padding: 6rem 0 2rem;
+  }
+  .heroTitle {
+    font-size: 2.2rem;
+  }
+  .heroSubtitle {
+    font-size: 1rem;
+  }
+  .infoTitle {
+    font-size: 1.8rem;
+  }
+  .contactGrid {
+    gap: 2rem;
+  }
+  .benefitsList {
+    grid-template-columns: 1fr;
+  }
+  .successTitle {
+    font-size: 1.8rem;
+  }
+  .formRow {
+    gap: 1rem;          /* Slightly smaller gap on mobile, but still clear */
+  }
+}

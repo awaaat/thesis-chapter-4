@@ -16,7 +16,6 @@ export default function Navbar({ activeNav = "" }) {
   const links = [
     { to: "/", label: "Home", key: "home", internal: true },
     { to: "/services", label: "Services", key: "services", internal: true },
-    { to: "/data-analysis-services", label: "Thesis Support", key: "support", internal: true },
     { to: PARENT_CONTACT_URL, label: "About", key: "about", internal: false },
     { to: PARENT_CONTACT_URL, label: "Contact", key: "contact", internal: false },
   ];
@@ -35,7 +34,9 @@ export default function Navbar({ activeNav = "" }) {
   return (
     <header className={styles.navbar}>
       <div className={styles.inner}>
-        <Link to="/" className={styles.brand} onClick={() => setOpen(false)}><img src="/Images/site-images/logo.svg" alt="Scape Data Solutions" style={{ height: 44, width: "auto", display: "block" }} /></Link>
+        <Link to="/" className={styles.brand} onClick={() => setOpen(false)}>
+          Scape Data Solutions
+        </Link>
 
         <nav className={styles.nav}>
           {links.map((l) =>

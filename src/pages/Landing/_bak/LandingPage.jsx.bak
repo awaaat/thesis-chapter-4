@@ -1,0 +1,195 @@
+import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
+import { Route } from "react-router-dom";
+import { landingPages, getPage, SITE, BRAND } from "./landingData";
+import styles from "./LandingPage.module.css";
+
+const steps = [
+  { t: "Send your request", d: "Share your dataset, objectives, deadline and budget through the order form." },
+  { t: "Get a clear quote", d: "We review your files and confirm scope, timeline and price before any payment." },
+  { t: "Receive your results", d: "You get analysis, tables and explanations, with revisions to match supervisor feedback." },
+];
+
+export function LandingPage({ page }) {
+  const url = `${SITE}/${page.slug}`;
+  const orderUrl = `/order-now?service=${page.slug}`;
+  const related = page.related.map(getPage).filter(Boolean);
+
+  const ld = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: page.short,
+      serviceType: page.short,
+      description: page.description,
+      url,
+      provider: { "@type": "Organization", name: BRAND, url: SITE },
+      areaServed: "Worldwide",
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: page.faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE },
+        { "@type": "ListItem", position: 2, name: "Data Analysis Services", item: `${SITE}/data-analysis-services` },
+        { "@type": "ListItem", position: 3, name: page.short, item: url },
+      ],
+    },
+  ];
+
+  return (
+    <main className={styles.page}>
+      <Helmet>
+        <title>{page.title}</title>
+        <meta name="description" content={page.description} />
+        <meta name="keywords" content={page.keywords} />
+        <link rel="canonical" href={url} />
+        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={page.title} />
+        <meta property="og:description" content={page.description} />
+        <meta property="og:url" content={url} />
+        <meta property="og:site_name" content={BRAND} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={page.title} />
+        <meta name="twitter:description" content={page.description} />
+        <script type="application/ld+json">{JSON.stringify(ld)}</script>
+      </Helmet>
+
+      <section className={styles.hero}>
+        <div className={styles.wrap}>
+          <nav aria-label="Breadcrumb" className={styles.crumbs}>
+            <Link to="/">Home</Link> / <Link to="/data-analysis-services">Services</Link> / <span>{page.short}</span>
+          </nav>
+          <h1>{page.h1}</h1>
+          <p className={styles.lead}>{page.intro}</p>
+          <div className={styles.ctaRow}>
+            <Link to={orderUrl} className={styles.btn}>Submit Your Request</Link>
+            <Link to="/contact" className={styles.btnGhost}>Ask a Question First</Link>
+          </div>
+          <ul className={styles.badges}>
+            <li>Free quote before you pay</li>
+            <li>Confidential files</li>
+            <li>Revisions for supervisor feedback</li>
+          </ul>
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <div className={styles.wrap}>
+          <h2>Sound familiar?</h2>
+          <ul className={styles.checks}>
+            {page.problems.map((p) => <li key={p}>{p}</li>)}
+          </ul>
+        </div>
+      </section>
+
+      <section className={`${styles.section} ${styles.alt}`}>
+        <div className={styles.wrap}>
+          <h2>What you get with {page.short}</h2>
+          <ul className={styles.cards}>
+            {page.deliverables.map((d) => <li key={d}>{d}</li>)}
+          </ul>
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <div className={styles.wrap}>
+          <h2>How it works</h2>
+          <ol className={styles.steps}>
+            {steps.map((s, i) => (
+              <li key={s.t}><span>{i + 1}</span><h3>{s.t}</h3><p>{s.d}</p></li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className={`${styles.section} ${styles.alt}`}>
+        <div className={styles.wrap}>
+          <h2>Frequently asked questions</h2>
+          {page.faqs.map((f) => (
+            <details key={f.q} className={styles.faq}>
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <div className={styles.wrap}>
+          <h2>Related services</h2>
+          <ul className={styles.related}>
+            {related.map((r) => (
+              <li key={r.slug}><Link to={`/${r.slug}`}>{r.short}</Link></li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className={styles.final}>
+        <div className={styles.wrap}>
+          <h2>Ready to get your analysis done?</h2>
+          <p>Tell us what you need and your deadline. You'll get a clear quote with no obligation.</p>
+          <Link to={orderUrl} className={styles.btn}>Submit Your Request</Link>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+export function ServicesHub() {
+  const url = `${SITE}/data-analysis-services`;
+  const title = "Data Analysis Services for Students & Researchers | Scape Data Solutions";
+  const desc = "SPSS analysis, thesis statistics, data cleaning, questionnaire analysis, regression and results interpretation. Explore every service and request a free quote.";
+  return (
+    <main className={styles.page}>
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={desc} />
+        <link rel="canonical" href={url} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={desc} />
+        <meta property="og:url" content={url} />
+      </Helmet>
+      <section className={styles.hero}>
+        <div className={styles.wrap}>
+          <h1>Data Analysis Services for Students and Researchers</h1>
+          <p className={styles.lead}>Pick the support you need. Every service starts with a free quote.</p>
+        </div>
+      </section>
+      <section className={styles.section}>
+        <div className={styles.wrap}>
+          <ul className={styles.cards}>
+            {landingPages.map((p) => (
+              <li key={p.slug}>
+                <Link to={`/${p.slug}`}><strong>{p.short}</strong></Link>
+                <p>{p.description}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+export function landingRoutes() {
+  return [
+    <Route key="hub" path="/data-analysis-services" element={<ServicesHub />} />,
+    ...landingPages.map((p) => (
+      <Route key={p.slug} path={`/${p.slug}`} element={<LandingPage page={p} />} />
+    )),
+  ];
+}
+
+export default LandingPage;
