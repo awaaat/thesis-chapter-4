@@ -3,10 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Mail } from "lucide-react";
 import styles from "./Navbar.module.css";
 
-// This site is a child of scapedatasolutions.com. Only Home and Services
-// are unique here — About and Contact route back to the parent site's
-// contact page rather than duplicating content this site doesn't own.
-const PARENT_CONTACT_URL = "https://www.scapedatasolutions.com/contact";
 const EMAIL = "info@scapedatasolutions.com";
 
 export default function Navbar({ activeNav = "" }) {
@@ -17,8 +13,8 @@ export default function Navbar({ activeNav = "" }) {
     { to: "/", label: "Home", key: "home", internal: true },
     { to: "/services", label: "Services", key: "services", internal: true },
     { to: "/data-analysis-services", label: "Thesis Support", key: "support", internal: true },
-    { to: PARENT_CONTACT_URL, label: "About", key: "about", internal: false },
-    { to: PARENT_CONTACT_URL, label: "Contact", key: "contact", internal: false },
+    { to: "/about", label: "About", key: "about", internal: true },
+    { to: "/contact", label: "Contact", key: "contact", internal: true },
   ];
 
   // Close the mobile panel whenever the route changes.

@@ -1,8 +1,8 @@
 // src/pages/Services/ServicesPage.jsx
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "../../lib/plainMotion";
 import {
   ArrowRight, BarChart3, ShieldCheck, Table2, ChevronRight,
-  TrendingUp, GitBranch, Layers, Network, Sparkles,
+  TrendingUp, GitBranch, Layers, Network,
   CheckCircle, Users, Clock, Award,
 } from "lucide-react";
 import SEO from "../../components/SEO/SEO";
@@ -833,7 +833,7 @@ export default function ServicesPage() {
 
       {/* ═══ FINAL CTA ═══ */}
       <motion.section className={styles.finalCta} {...anim(fadeUp)}>
-        <Sparkles size={22} className={styles.finalCtaIcon} aria-hidden="true" />
+        <CheckCircle size={22} className={styles.finalCtaIcon} aria-hidden="true" />
         <h2>Not sure which service you need?</h2>
         <p>Send your research questions and any data you already have, and we'll tell you exactly what's involved.</p>
         <div className={styles.heroBtnRow} style={{ justifyContent: "center" }}>

@@ -2,7 +2,7 @@
 .root { --head: Georgia, "Times New Roman", serif; --body: system-ui, -apple-system, "Segoe UI", sans-serif; --note: #fff3a8; --onAccent: #111;
   background: var(--bg); color: var(--ink); font-family: var(--body); position: relative; }
 .th_paper     { --bg:#faf6ec; --ink:#1c1a14; --muted:#5f5a4b; --rule:#ddd5bf; --accent:#c98a00; --card:#fffdf7; --heroBg:#f2ead3; --heroFg:#1c1a14; }
-.th_academic  { --bg:#fbfaf7; --ink:#14213d; --muted:#4b5568; --rule:#d6d9e0; --accent:#9b1c31; --card:#fff; --heroBg:#14213d; --heroFg:#fbfaf7; --onAccent:#fff; --body: Charter, "Iowan Old Style", Georgia, serif; }
+.th_academic  { --bg:#ffffff; --ink:#14213d; --muted:#4b5568; --rule:#d6d9e0; --accent:#9b1c31; --card:#fff; --heroBg:#14213d; --heroFg:#ffffff; --onAccent:#fff; --body: Charter, "Iowan Old Style", Georgia, serif; }
 .th_slate     { --bg:#eef2f5; --ink:#17232d; --muted:#52606b; --rule:#cfd8df; --accent:#0f8b8d; --card:#fff; --heroBg:#eef2f5; --heroFg:#e6edf3; --onAccent:#fff; --head: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
 .th_coral     { --bg:#fffaf7; --ink:#2b1d1a; --muted:#6d5a55; --rule:#f0ddd6; --accent:#ff6b4a; --card:#fff; --heroBg:#ffe9e0; --heroFg:#2b1d1a; --head: ui-rounded, "Nunito", "Trebuchet MS", system-ui, sans-serif; --body: ui-rounded, "Nunito", system-ui, sans-serif; --onAccent:#1a0a05; }
 .th_sheet     { --bg:#f4faf5; --ink:#123022; --muted:#4a6355; --rule:#c9dccf; --accent:#217346; --card:#fff; --heroBg:#217346; --heroFg:#fff; --onAccent:#fff; --head: ui-monospace, Menlo, Consolas, monospace; }
@@ -210,3 +210,12 @@
 @media (max-width: 720px) {
   .float { display: inline-block; position: fixed; right: 1rem; bottom: 1rem; z-index: 40; padding: .7rem 1.4rem; border-radius: 9999px; background: var(--accent); color: var(--onAccent); font-weight: 600; font-size: .9rem; text-decoration: none; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
 }
+
+/* ---------- single brand theme used by every landing page + hub ---------- */
+.th_brand { --bg:#ffffff; --ink:#333333; --muted:#626262; --rule:#e4eefc; --accent:#2f8a43; --card:#ffffff;
+  --heroBg:#f8fbff; --heroFg:#333333; --onAccent:#ffffff; --note:#eaf6f0; --head:var(--font-display); --body:var(--font-sans); }
+.th_brand .title, .th_brand .h2 { font-weight: 800; letter-spacing: -.015em; }
+.th_brand .btn { border-radius: 25px; font-family: var(--font-display); font-weight: 700; }
+.th_brand .btn:hover { transform: none; background: #26763a; }
+.th_brand .peek { box-shadow: none; border-radius: 10px; }
+.th_brand .section { border-top-color: var(--rule); }

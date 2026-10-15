@@ -31,13 +31,13 @@ export function HeroDashboard({ className }) {
     <svg className={className} viewBox="0 0 420 360" role="img" aria-labelledby="heroTitle">
       <title id="heroTitle">Dashboard showing raw SPSS output transformed into an APA 7 formatted results table</title>
       {/* Left panel: messy output */}
-      <rect x="10" y="10" width="190" height="340" rx="8" fill="#f5f3ee" stroke="#ddd" strokeWidth="1.2" />
+      <rect x="10" y="10" width="190" height="340" rx="8" fill="#f8fbff" stroke="#ddd" strokeWidth="1.2" />
       <text x="24" y="34" fontSize="9" fill="#888" fontFamily="monospace">* * * * * * * * * * * * *</text>
       <text x="24" y="50" fontSize="9" fill="#888" fontFamily="monospace">* * * * * * * * * * * * *</text>
       <rect x="20" y="66" width="170" height="4" fill="#ccc" rx="1" />
       <rect x="20" y="78" width="140" height="4" fill="#ccc" rx="1" />
       <rect x="20" y="90" width="160" height="4" fill="#ccc" rx="1" />
-      <rect x="20" y="104" width="50" height="12" fill="#b8862c" opacity="0.2" rx="2" />
+      <rect x="20" y="104" width="50" height="12" fill="#2f8a43" opacity="0.2" rx="2" />
       <rect x="20" y="124" width="170" height="4" fill="#ccc" rx="1" />
       <rect x="20" y="136" width="130" height="4" fill="#ccc" rx="1" />
       <text x="24" y="166" fontSize="8" fill="#888" fontFamily="monospace">&gt; t-test output...</text>
@@ -45,13 +45,13 @@ export function HeroDashboard({ className }) {
       <text x="24" y="198" fontSize="8" fill="#888" fontFamily="monospace">&gt; Levene's F = 0.87</text>
       <rect x="20" y="218" width="170" height="4" fill="#ccc" rx="1" />
       <rect x="20" y="230" width="90" height="4" fill="#ccc" rx="1" />
-      <text x="24" y="260" fontSize="8" fill="#b8862c" fontFamily="monospace">** Results not formatted **</text>
+      <text x="24" y="260" fontSize="8" fill="#2f8a43" fontFamily="monospace">** Results not formatted **</text>
       {/* Arrow */}
-      <path d="M210 180l30 0" stroke="#b8862c" strokeWidth="2.5" />
-      <polygon points="240,177 248,180 240,183" fill="#b8862c" />
+      <path d="M210 180l30 0" stroke="#2f8a43" strokeWidth="2.5" />
+      <polygon points="240,177 248,180 240,183" fill="#2f8a43" />
       {/* Right panel: clean APA table */}
-      <rect x="252" y="10" width="158" height="340" rx="8" fill="#fff" stroke="#b8862c" strokeWidth="1.5" />
-      <text x="266" y="34" fontSize="10" fill="#1c1c2b" fontWeight="bold">Table 1</text>
+      <rect x="252" y="10" width="158" height="340" rx="8" fill="#fff" stroke="#2f8a43" strokeWidth="1.5" />
+      <text x="266" y="34" fontSize="10" fill="#333333" fontWeight="bold">Table 1</text>
       <text x="266" y="50" fontSize="8" fill="#555" fontStyle="italic">Descriptive Statistics</text>
       <rect x="262" y="62" width="138" height="1" fill="#333" />
       <text x="266" y="78" fontSize="8" fontWeight="bold">Variable   M    SD    t    p</text>
@@ -61,7 +61,7 @@ export function HeroDashboard({ className }) {
       <rect x="262" y="130" width="138" height="1" fill="#333" />
       <text x="266" y="146" fontSize="8" fontStyle="italic">Note. *p &lt; .05, **p &lt; .01</text>
       <rect x="262" y="160" width="138" height="1" fill="#ddd" strokeDasharray="2 2" />
-      <text x="266" y="176" fontSize="8" fill="#b8862c" fontWeight="bold">✓ APA 7 compliant</text>
+      <text x="266" y="176" fontSize="8" fill="#2f8a43" fontWeight="bold">✓ APA 7 compliant</text>
       <text x="266" y="190" fontSize="8" fill="#555">✓ Interpreted</text>
       <text x="266" y="204" fontSize="8" fill="#555">✓ Ready for Chapter 4</text>
     </svg>

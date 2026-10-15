@@ -5,12 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node scripts/gen-sitemap.mjs && vite build && node scripts/prerender.mjs",
     "lint": "oxlint",
     "preview": "vite preview",
-    "build:seo": "vite build && node scripts/prerender.mjs"
+    "build:seo": "node scripts/gen-sitemap.mjs && vite build && node scripts/prerender.mjs",
+    "build:spa": "vite build"
   },
   "dependencies": {
+    "@fontsource/mulish": "^5.3.0",
+    "@fontsource/roboto": "^5.3.0",
     "@sanity/client": "^8.9.0",
     "framer-motion": "^13.2.0",
     "lucide-react": "^1.40.0",

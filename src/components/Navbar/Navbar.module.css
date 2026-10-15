@@ -1,13 +1,13 @@
 /* ===== Same token values as the page — kept local so the navbar works
    standalone even outside .page's scope ===== */
 .navbar {
-  --color-bg: #fbfaf7;
-  --color-text: #1c1c2b;
-  --color-text-secondary: #55566b;
-  --color-border: #e6e3d8;
-  --color-accent: #b8862c;
-  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --color-bg: #ffffff;
+  --color-text: #333333;
+  --color-text-secondary: #626262;
+  --color-border: #e4eefc;
+  --color-accent: #2f8a43;
+  --font-display: "Mulish", "Avenir", "Segoe UI", Arial, sans-serif;
+  --font-sans: "Roboto", -apple-system, "Segoe UI", Arial, sans-serif;
 
   position: sticky;
   top: 0;
@@ -53,10 +53,10 @@
   align-items: center;
   gap: 7px;
   padding: 8px 16px;
-  border: 1px solid rgba(184, 134, 44, 0.38);
+  border: 1px solid rgba(47, 138, 67, 0.38);
   border-radius: 999px;
   color: var(--color-accent);
-  background: rgba(184, 134, 44, 0.07);
+  background: rgba(47, 138, 67, 0.07);
   font-size: 0.9rem;
   font-weight: 600;
   text-decoration: none;
@@ -64,7 +64,7 @@
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 .emailLink:hover {
-  background: rgba(184, 134, 44, 0.15);
+  background: rgba(47, 138, 67, 0.15);
   border-color: var(--color-accent);
 }
 
@@ -164,3 +164,8 @@
   .toggle { display: flex; }
   .mobilePanel { display: flex; }
 }
+/* ---------- brand overrides ---------- */
+.navbar { --color-accent-hover: #26763a; border-bottom: 1px solid var(--color-border); }
+.cta { background: var(--color-accent); color: #fff; border-radius: 25px; font-family: var(--font-display); font-weight: 700; }
+.cta:hover { background: var(--color-accent-hover); filter: none; transform: none; }
+.mobileCta { background: var(--color-accent); color: #fff; }

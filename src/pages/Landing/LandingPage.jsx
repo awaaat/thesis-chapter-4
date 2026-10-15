@@ -19,37 +19,7 @@ const LABELS = {
   related: "Related help",
 };
 
-/* One entry per page: theme (colours + fonts), hero, heading style, and a different
-   presentation for every block. Nothing is shared between neighbouring pages. */
-const LAYOUT = {
-  "spss-data-analysis-help": { theme: "paper", hero: "split", head: "num", problems: "notes", steps: "rail", deliver: "ticks", example: "rule", guide: "rule", mistakes: "list", faq: "acc" },
-  "thesis-data-analysis-help": { theme: "academic", hero: "left", head: "rule", toc: true, problems: "big", steps: "big", deliver: "rows", example: "rule", guide: "rule", mistakes: "big", faq: "grid",
-    order: ["problems", "steps", "example", "deliver", "guide", "mistakes", "faq", "related"], labels: { problems: "Where students get stuck", steps: "From proposal to defence" } },
-  "research-data-cleaning-service": { theme: "slate", hero: "term", head: "tag", problems: "log", steps: "line", deliver: "tree", example: "term", guide: "sheet", mistakes: "split", faq: "acc",
-    order: ["problems", "example", "steps", "deliver", "guide", "mistakes", "faq", "related"], labels: { problems: "What the raw file looks like", example: "Issues found in a typical export" } },
-  "questionnaire-data-analysis-help": { theme: "coral", hero: "center", head: "plain", problems: "chat", steps: "circles", deliver: "chips", example: "rule", guide: "rule", mistakes: "flags", faq: "chat",
-    labels: { problems: "What students tell us", faq: "Ask away" } },
-  "excel-statistical-analysis-help": { theme: "sheet", hero: "sheet", head: "tag", problems: "check", steps: "stairs", deliver: "tiles", example: "sheet", guide: "sheet", mistakes: "split", faq: "grid",
-    order: ["problems", "deliver", "steps", "example", "guide", "mistakes", "faq", "related"] },
-  "research-results-interpretation": { theme: "plum", hero: "band", head: "plain", problems: "notes", steps: "line", deliver: "rows", example: "rule", guide: "rule", mistakes: "flags", faq: "chat",
-    order: ["problems", "example", "steps", "guide", "deliver", "mistakes", "faq", "related"], labels: { example: "A table, read line by line" } },
-  "regression-analysis-help": { theme: "night", hero: "dark", head: "tag", toc: true, problems: "log", steps: "big", deliver: "tiles", example: "term", guide: "sheet", mistakes: "big", faq: "acc" },
-  "chapter-4-results-writing-help": { theme: "ink", hero: "left", head: "num", toc: true, problems: "dash", steps: "line", deliver: "ticks", example: "sheet", guide: "rule", mistakes: "split", faq: "grid",
-    order: ["problems", "example", "steps", "deliver", "guide", "mistakes", "faq", "related"], labels: { example: "A Chapter 4 skeleton" } },
-  "likert-scale-data-analysis": { theme: "rose", hero: "split", head: "plain", problems: "chat", steps: "stairs", deliver: "chips", example: "rule", guide: "rule", mistakes: "big", faq: "acc",
-    order: ["problems", "guide", "steps", "deliver", "example", "mistakes", "faq", "related"] },
-  "cronbach-alpha-reliability-analysis": { theme: "sky", hero: "band", head: "rule", problems: "check", steps: "circles", deliver: "rows", example: "sheet", guide: "rule", mistakes: "flags", faq: "grid",
-    order: ["problems", "example", "guide", "steps", "deliver", "mistakes", "faq", "related"] },
-  "factor-analysis-spss-help": { theme: "violet", hero: "dark", head: "num", toc: true, problems: "notes", steps: "line", deliver: "tiles", example: "term", guide: "sheet", mistakes: "list", faq: "chat" },
-  "mediation-moderation-analysis-help": { theme: "lavender", hero: "center", head: "tag", problems: "big", steps: "rail", deliver: "tree", example: "rule", guide: "sheet", mistakes: "split", faq: "acc",
-    order: ["problems", "guide", "steps", "example", "deliver", "mistakes", "faq", "related"] },
-  "sem-amos-smartpls-help": { theme: "blueprint", hero: "term", head: "tag", toc: true, problems: "check", steps: "stairs", deliver: "tiles", example: "term", guide: "sheet", mistakes: "flags", faq: "grid" },
-  "kobotoolbox-odk-data-analysis-help": { theme: "field", hero: "band", head: "rule", problems: "dash", steps: "big", deliver: "tree", example: "sheet", guide: "rule", mistakes: "list", faq: "chat",
-    order: ["problems", "example", "steps", "deliver", "guide", "mistakes", "faq", "related"] },
-  "sample-size-calculation-help": { theme: "tomato", hero: "split", head: "num", problems: "log", steps: "circles", deliver: "rows", example: "rule", guide: "sheet", mistakes: "big", faq: "acc",
-    order: ["problems", "guide", "example", "steps", "deliver", "mistakes", "faq", "related"] },
-};
-const FALLBACK = { theme: "paper", hero: "left", head: "num", problems: "dash", steps: "rail", deliver: "ticks", example: "rule", guide: "rule", mistakes: "list", faq: "acc" };
+const FALLBACK = { theme: "brand", hero: "split", head: "num", problems: "dash", steps: "rail", deliver: "ticks", example: "rule", guide: "rule", mistakes: "list", faq: "acc" };
 
 function Table({ head, rows, v = "rule" }) {
   const sheet = v === "sheet";
@@ -150,7 +120,7 @@ function Hero({ page, v }) {
 
 export function LandingPage({ page }) {
   const url = `${SITE}/${page.slug}`;
-  const cfg = LAYOUT[page.slug] || FALLBACK;
+  const cfg = FALLBACK;
   const order = cfg.order || ORDER;
   const labels = { ...LABELS, ...(cfg.labels || {}), guide: page.guide.title };
   const related = page.related.map(getPage).filter(Boolean);
@@ -233,7 +203,7 @@ export function LandingPage({ page }) {
         jsonLd={ld}
       />
 
-      <main className={hStyles.mainContent} style={{ paddingTop: 0 }}>
+      <div className={hStyles.mainContent}>
         <div className={cx(s.root, s["th_" + cfg.theme])}>
           <Hero page={page} v={cfg.hero} />
           {cfg.toc ? (
@@ -253,7 +223,7 @@ export function LandingPage({ page }) {
           <div className={s.wrap}><LandingContact page={page} /></div>
           <a href="#request" className={s.float}>Get a quote</a>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
@@ -279,8 +249,8 @@ export function ServicesHub() {
         breadcrumbs={[{ name: "Home", path: "/" }, { name: "Data Analysis Services", path: "/data-analysis-services" }]}
         jsonLd={hubLd}
       />
-      <main className={hStyles.mainContent} style={{ paddingTop: 0 }}>
-        <div className={cx(s.root, s.th_ink)}>
+      <div className={hStyles.mainContent}>
+        <div className={cx(s.root, s.th_brand)}>
           <header className={cx(s.hero, s.hero_left)}>
             <div className={s.wrap}>
               <p className={s.eyebrow}>Thesis and research support</p>
@@ -309,7 +279,7 @@ export function ServicesHub() {
             <LandingContact />
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
