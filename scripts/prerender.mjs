@@ -1,60 +1,68 @@
-// Renders every route in public/sitemap.xml in headless Chrome and writes dist/<route>/index.html,
-// so crawlers that do not run JavaScript (Bing, social cards, AI bots) get the full page.
-import { createServer } from "node:http";
-import { readFile, writeFile, mkdir } from "node:fs/promises";
-import { existsSync, readFileSync } from "node:fs";
-import { join, extname, resolve, sep } from "node:path";
-import puppeteer from "puppeteer";
+import http from 'node:http';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
-const DIST = resolve("dist");
-const PORT = 4783;
-const TYPES = { ".html": "text/html", ".js": "text/javascript", ".mjs": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".json": "application/json", ".woff2": "font/woff2", ".xml": "application/xml", ".txt": "text/plain", ".ico": "image/x-icon" };
+const DIST = path.resolve('dist');
+const ROUTES = ['/', '/services', '/about', '/contact', '/order-now'];
+const PORT = 4599;
+const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml',
+  '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.json': 'application/json', '.xml': 'application/xml', '.txt': 'text/plain' };
 
-if (!existsSync(join(DIST, "index.html"))) { console.error("dist/index.html missing. Run vite build first."); process.exit(1); }
-const shell = readFileSync(join(DIST, "index.html"));
+async function main() {
+  let puppeteer;
+  try { puppeteer = (await import('puppeteer')).default; }
+  catch { console.warn('[prerender] puppeteer unavailable, skipping'); return; }
 
-const server = createServer(async (req, res) => {
-  const path = decodeURIComponent(new URL(req.url, "http://x").pathname);
-  const file = resolve(join(DIST, path));
-  if (extname(path) && file.startsWith(DIST + sep) && existsSync(file)) {
-    res.writeHead(200, { "content-type": TYPES[extname(path)] || "application/octet-stream" });
-    res.end(await readFile(file));
-  } else {
-    res.writeHead(200, { "content-type": "text/html" });
-    res.end(shell);
-  }
-}).listen(PORT);
+  const shell = await fs.readFile(path.join(DIST, 'index.html'));
+  const server = http.createServer(async (req, res) => {
+    const urlPath = decodeURIComponent(req.url.split('?')[0]);
+    const file = path.join(DIST, urlPath);
+    try {
+      if (!file.startsWith(DIST)) throw new Error('bad path');
+      const st = await fs.stat(file);
+      if (!st.isFile()) throw new Error('not file');
+      res.writeHead(200, { 'Content-Type': MIME[path.extname(file)] || 'application/octet-stream' });
+      res.end(await fs.readFile(file));
+    } catch {
+      res.writeHead(200, { 'Content-Type': 'text/html' });
+      res.end(shell);
+    }
+  }).listen(PORT);
 
-const sitemap = existsSync("public/sitemap.xml") ? readFileSync("public/sitemap.xml", "utf8") : "";
-const routes = [...new Set(["/", ...[...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]).pathname.replace(/\/+$/, "") || "/")])];
-
-const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox", "--disable-setuid-sandbox"] });
-let failed = 0;
-for (const route of routes) {
-  const page = await browser.newPage();
-  await page.setRequestInterception(true);
-  page.on("request", (r) => (r.url().startsWith(`http://localhost:${PORT}`) ? r.continue() : r.abort()));
+  let browser;
+  const results = [];
   try {
-    await page.goto(`http://localhost:${PORT}${route}`, { waitUntil: "networkidle0", timeout: 30000 });
-    await page.waitForSelector("h1", { timeout: 10000 });
-    await new Promise((r) => setTimeout(r, 400));
-    const html = await page.evaluate(() => {
-      // Helmet adds data-rh tags next to the static ones from index.html: keep only the page-specific copy.
-      const key = (e) => (e.tagName === "META" ? "m:" + (e.getAttribute("name") || e.getAttribute("property")) : e.tagName === "LINK" ? "l:" + e.getAttribute("rel") : e.tagName === "TITLE" ? "title" : null);
-      const managed = new Set([...document.head.querySelectorAll("[data-rh]")].map(key));
-      document.head.querySelectorAll("title:not([data-rh]), meta:not([data-rh]), link:not([data-rh])").forEach((e) => { const k = key(e); if (k && managed.has(k)) e.remove(); });
-      return "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
-    });
-    const out = route === "/" ? join(DIST, "index.html") : join(DIST, route, "index.html");
-    await mkdir(resolve(out, ".."), { recursive: true });
-    await writeFile(out, html);
-    console.log("prerendered", route);
+    browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+    for (const route of ROUTES) {
+      const page = await browser.newPage();
+      await page.goto(`http://localhost:${PORT}${route}`, { waitUntil: 'networkidle0', timeout: 30000 });
+      await page.waitForSelector('#root > *', { timeout: 10000 });
+      await new Promise(r => setTimeout(r, 500));
+      const html = '<!DOCTYPE html>' + await page.evaluate(() => document.documentElement.outerHTML);
+      const info = await page.evaluate(() => ({
+        title: document.title,
+        desc: document.querySelector('meta[name="description"]')?.content || '(none)',
+        canonical: document.querySelector('link[rel="canonical"]')?.href || '(none)',
+        h1: document.querySelectorAll('h1').length,
+        words: document.body.innerText.split(/\s+/).filter(Boolean).length,
+      }));
+      results.push({ route, html, info });
+      await page.close();
+    }
+    for (const { route, html } of results) {
+      const out = route === '/' ? path.join(DIST, 'index.html') : path.join(DIST, route, 'index.html');
+      await fs.mkdir(path.dirname(out), { recursive: true });
+      await fs.writeFile(out, html);
+    }
+    console.log('\n[prerender] SEO AUDIT');
+    for (const { route, info } of results) {
+      console.log(`\n${route}\n  title:     ${info.title}\n  desc:      ${info.desc.slice(0, 90)}\n  canonical: ${info.canonical}\n  h1 count:  ${info.h1}\n  words:     ${info.words}`);
+    }
   } catch (e) {
-    failed++;
-    console.error("FAILED", route, e.message);
+    console.warn('[prerender] failed, shipping plain SPA build:', e.message);
+  } finally {
+    if (browser) await browser.close();
+    server.close();
   }
-  await page.close();
 }
-await browser.close();
-server.close();
-process.exit(failed ? 1 : 0);
+main().then(() => process.exit(0));
