@@ -1,0 +1,203 @@
+/* ============================================================================
+   Toptal theme for the whole site (everything except /order-now, which has its
+   own copy of the same tokens).
+
+   HOW IT WORKS
+   Every page already reads its colours, fonts and radii from CSS variables, but
+   each CSS module re-declares them locally, so a plain :root override would not
+   reach them. This file is loaded LAST (see main.jsx) and targets the hashed
+   module class names with [class*="_name_"] selectors, prefixed with `body` so
+   it beats the module rules without !important.
+
+   TO UNDO: delete the `import "./toptal-theme.css"` line in src/main.jsx.
+
+   VALUES (taken from the Toptal homepage files)
+     green  #00cc83  (hover #03b080, pressed #05947c)  buttons
+     blue   #204ecf  links, labels, focus rings
+     navy   #0f256e  footer and closing call-to-action bands
+     text   #262d3d / headings #191e28 / secondary #455065 / muted #84888e
+     border #d8d9dc, soft backgrounds #f5f5f7, radius 6px
+     font   Proxima Nova (paid), Mulish as the free stand-in
+   ========================================================================== */
+
+:root {
+  --tp-font: "Proxima Nova", proxima-nova, "Mulish", Arial, sans-serif;
+  --tp-text: #262d3d; --tp-head: #191e28; --tp-muted: #455065; --tp-faint: #84888e;
+  --tp-border: #d8d9dc; --tp-soft: #f5f5f7; --tp-softer: #fbfcfc;
+  --tp-blue: #204ecf; --tp-blue-d: #0f256e;
+  --tp-green: #00cc83; --tp-green-d: #03b080; --tp-green-dd: #05947c;
+  --tp-navy: #0f256e;
+  --tp-r: 6px;
+
+  /* site-wide tokens (used by index.css, Footer, PortalCallout, About, Contact) */
+  --color-bg: #fff; --color-bg-card: #fff; --color-bg-alt: var(--tp-soft);
+  --color-text: var(--tp-text); --color-text-secondary: var(--tp-muted); --color-text-muted: var(--tp-faint);
+  --color-border: var(--tp-border); --color-border-hover: #84888e;
+  --color-accent: var(--tp-blue); --color-accent-hover: var(--tp-blue-d);
+  --color-accent-soft: rgba(32, 78, 207, .08); --color-focus: var(--tp-blue);
+  --brand: var(--tp-green);
+  --font-display: var(--tp-font); --font-sans: var(--tp-font);
+  --radius-md: 6px; --radius-lg: 6px; --radius-xl: 6px; --radius-2xl: 6px;
+  --navy: var(--tp-navy); --gold: var(--tp-green);
+  --text: var(--tp-text); --text-muted: var(--tp-muted); --text-faint: var(--tp-faint);
+  --border: var(--tp-border); --bg-soft: var(--tp-soft);
+}
+
+/* The modules re-declare the tokens on their own roots; redeclare them again here. */
+body [class*="_page_"], body [class*="_navbar_"], body [class*="_root_"] {
+  --color-bg: #fff; --color-bg-card: #fff; --color-bg-alt: var(--tp-soft);
+  --color-text: var(--tp-text); --color-text-secondary: var(--tp-muted); --color-text-muted: var(--tp-faint);
+  --color-border: var(--tp-border);
+  --color-accent: var(--tp-blue); --color-accent-hover: var(--tp-blue-d);
+  --color-accent-soft: rgba(32, 78, 207, .08); --color-focus: var(--tp-blue);
+  --brand: var(--tp-green);
+  --font-display: var(--tp-font); --font-sans: var(--tp-font);
+  --radius-md: 6px; --radius-lg: 6px; --radius-xl: 6px; --radius-2xl: 6px;
+  font-family: var(--tp-font);
+}
+/* Landing pages: the single brand theme becomes the Toptal one. */
+body [class*="_th_brand_"] {
+  --bg: #fff; --ink: var(--tp-text); --muted: var(--tp-muted); --rule: var(--tp-border);
+  --accent: var(--tp-blue); --card: #fff; --heroBg: var(--tp-soft); --heroFg: var(--tp-text);
+  --onAccent: #fff; --note: #edf1fd; --head: var(--tp-font); --body: var(--tp-font);
+}
+
+/* ---------- base type: Toptal scale (28px headings, 16px body) ---------- */
+html, body { font-family: var(--tp-font); color: var(--tp-text); }
+body { font-size: 16px; line-height: 1.5; }
+body h1, body h2, body h3, body h4, body h5, body h6 { font-family: var(--tp-font) !important; color: var(--tp-head); }
+body h1 { font-size: clamp(1.75rem, 3.2vw, 2.5rem) !important; line-height: 1.2 !important; font-weight: 600 !important; letter-spacing: -.01em !important; }
+body h2 { font-size: clamp(1.5rem, 2.4vw, 1.875rem) !important; line-height: 1.25 !important; font-weight: 600 !important; letter-spacing: 0 !important; }
+body h3 { font-size: 1.125rem !important; line-height: 1.4 !important; font-weight: 600 !important; }
+body h4, body h5, body h6 { font-size: 1rem !important; font-weight: 600 !important; }
+/* Page-specific heading classes that set their own size/weight */
+body [class*="_heroTitle_"], body [class*="_secTitle_"], body [class*="_mapStripTitle_"], body [class*="_quickAnswerTitle_"],
+body [class*="_catTitle_"], body [class*="_scopeTitle_"], body [class*="_tableGroupTitle_"], body [class*="_faqQuestion_"],
+body [class*="_miniArticleTitle_"] { font-family: var(--tp-font); font-weight: 600; letter-spacing: 0; color: var(--tp-head); }
+body [class*="_heroTitle_"] { font-size: clamp(1.75rem, 3.2vw, 2.5rem); line-height: 1.2; }
+body [class*="_secTitle_"] { font-size: clamp(1.5rem, 2.4vw, 1.875rem); }
+body [class*="_mapStripTitle_"], body [class*="_quickAnswerTitle_"] { font-size: clamp(1.375rem, 2.2vw, 1.625rem); }
+body [class*="_scopeTitle_"], body [class*="_catTitle_"], body [class*="_tableGroupTitle_"] { font-size: 1.125rem; }
+body [class*="_faqQuestion_"], body [class*="_miniArticleTitle_"] { font-size: 1.0625rem; }
+body [class*="_pullquote_"] { font-family: var(--tp-font); font-size: 1.125rem; }
+body [class*="_heroStat_"] dt { font-family: var(--tp-font); font-weight: 600; font-size: 1.5rem; color: var(--tp-blue); }
+body [class*="_lead_"], body [class*="_heroSub_"], body [class*="_prose_"], body [class*="_mapStripDesc_"] { font-size: 1.125rem; line-height: 1.55; color: var(--tp-muted); }
+
+/* Small uppercase labels become Toptal's blue eyebrow */
+body [class*="_secLabel_"], body [class*="_eyebrow_"], body [class*="_field_"] { color: var(--tp-blue) !important; font-weight: 700; letter-spacing: .08em; }
+
+/* ---------- navbar: white, 64px, thin border, blue underline on hover ---------- */
+body [class*="_navbar_"] { border-bottom: 1px solid var(--tp-border); background: #fff; }
+body [class*="_navbar_"] [class*="_inner_"] { padding: 0 24px; min-height: 64px; max-width: 1280px; }
+body [class*="_navbar_"] [class*="_nav_"] { gap: 24px; }
+body [class*="_navbar_"] [class*="_link_"] {
+  font-size: 15px; font-weight: 600; color: var(--tp-text); padding: 21px 0 19px; border-bottom: 2px solid transparent;
+}
+body [class*="_navbar_"] [class*="_link_"]:hover { color: var(--tp-text); border-bottom-color: var(--tp-blue); }
+body [class*="_navbar_"] [class*="_linkActive_"] { color: var(--tp-text); border-bottom-color: var(--tp-blue); }
+body [class*="_navbar_"] [class*="_emailLink_"] {
+  border: 0; background: transparent; border-radius: 6px; padding: 8px 10px; color: var(--tp-blue); font-size: 14px; font-weight: 600;
+}
+body [class*="_navbar_"] [class*="_emailLink_"]:hover { background: #edf1fd; }
+body [class*="_navbar_"] [class*="_cta_"], body [class*="_navbar_"] [class*="_mobileCta_"] {
+  background: var(--tp-green); color: #fff; border-radius: 6px; font-family: var(--tp-font); font-weight: 600; font-size: 15px; padding: 10px 25px;
+}
+body [class*="_navbar_"] [class*="_cta_"]:hover, body [class*="_navbar_"] [class*="_mobileCta_"]:hover { background: var(--tp-green-d); }
+body [class*="_navbar_"] [class*="_cta_"]:active { background: var(--tp-green-dd); }
+body [class*="_navbar_"] [class*="_toggle_"] { border-radius: 6px; border-color: var(--tp-border); }
+body [class*="_navbar_"] [class*="_toggle_"]:hover { border-color: var(--tp-blue); color: var(--tp-blue); }
+body [class*="_navbar_"] [class*="_mobileLink_"] { font-size: 16px; font-weight: 600; color: var(--tp-text); border-bottom-color: #ebeced; }
+body [class*="_navbar_"] [class*="_mobileEmail_"] { border-radius: 6px; border-color: var(--tp-blue); color: var(--tp-blue); }
+
+/* ---------- buttons (home, services, landing) ---------- */
+body [class*="_btnPrimary_"], body [class*="_btn_"][class*="_btn_"], body [class*="_float_"] {
+  background: var(--tp-green); color: #fff; border: 0; border-radius: 6px; font-family: var(--tp-font); font-weight: 600; font-size: 16px;
+  min-height: 48px; padding: 0 25px; display: inline-flex; align-items: center; justify-content: center; transform: none; filter: none;
+}
+body [class*="_btnPrimary_"]:hover, body [class*="_btn_"]:hover, body [class*="_float_"]:hover { background: var(--tp-green-d); transform: none; filter: none; }
+body [class*="_btnPrimary_"]:active, body [class*="_btn_"]:active { background: var(--tp-green-dd); }
+body [class*="_btnOutline_"], body [class*="_btnSecondary_"] {
+  background: #fff; color: var(--tp-blue); border: 1px solid var(--tp-border); border-radius: 6px; font-family: var(--tp-font); font-weight: 600; font-size: 16px; min-height: 48px; padding: 0 25px;
+}
+body [class*="_btnOutline_"]:hover, body [class*="_btnSecondary_"]:hover { background: #edf1fd; border-color: var(--tp-blue); }
+body [class*="_btnWhite_"], body [class*="_btnGhost_"], body [class*="_btnSecondaryLight_"] { border-radius: 6px; font-family: var(--tp-font); font-weight: 600; min-height: 48px; }
+body [class*="_btnWhite_"] { background: #fff; color: var(--tp-navy); }
+body [class*="_btnWhite_"]:hover { background: #edf1fd; }
+body [class*="_btn_"], body [class*="_btnPrimary_"], body [class*="_btnOutline_"], body [class*="_btnSecondary_"] { text-decoration: none; }
+body a:focus-visible, body button:focus-visible, body summary:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(32, 78, 207, .5); border-radius: 6px; }
+
+/* ---------- hero + section backgrounds ---------- */
+body section[class*="_hero_"], body header[class*="_hero_"], body [class*="_quickAnswer_"], body [class*="_secAlt_"], body [class*="_alt_"] { background: var(--tp-soft); }
+body [class*="_strip_"] { border-bottom-color: var(--tp-border); }
+body [class*="_heroImg_"], body [class*="_heroImageFrame_"], body [class*="_mapStripImageFrame_"] { border-radius: 6px; border-color: var(--tp-border); box-shadow: none; }
+body [class*="_heroDashboardChip_"] { border-radius: 6px; box-shadow: 0 8px 24px rgba(25, 30, 40, .14); }
+
+/* ---------- cards, tables, lists, faq: flat, 6px, gray border ---------- */
+body [class*="_card_"], body [class*="_deliver_"] > div, body [class*="_steps_"] > li, body [class*="_scopeCard_"], body [class*="_faqItem_"],
+body [class*="_tableWrap_"], body [class*="_spotFigure_"], body [class*="_callout_"] { border-radius: 6px; border-color: var(--tp-border); box-shadow: none; }
+body [class*="_card_"] { border-top: 1px solid var(--tp-border); }
+body [class*="_scopeCardFeatured_"] { border-color: var(--tp-blue); box-shadow: 0 0 0 1px var(--tp-blue); }
+body [class*="_scopeBadge_"] { background: var(--tp-blue); border-radius: 6px; }
+body [class*="_stepNum_"] { background: var(--tp-blue); color: #fff; }
+body [class*="_secIcon_"], body [class*="_catIcon_"] { background: #edf1fd; color: var(--tp-blue); border-color: transparent; }
+body [class*="_chip_"] { border-radius: 6px; border-color: var(--tp-border); color: var(--tp-text); }
+body [class*="_chip_"]:hover { border-color: var(--tp-blue); background: #edf1fd; color: var(--tp-blue); }
+body [class*="_table_"] th { background: var(--tp-soft); font-family: var(--tp-font); font-weight: 600; }
+body [class*="_ticks_"] svg { color: var(--tp-green); }
+body [class*="_bulletItem_"]::before { background: var(--tp-green); }
+body [class*="_miniArticle_"] { border-top-color: var(--tp-green); }
+body [class*="_pullquote_"] { border-left-color: var(--tp-green); }
+body [class*="_faq_"] summary::after, body [class*="_faqQuestion_"]::after { color: var(--tp-blue); }
+body [class*="_topics_"] h3 { color: var(--tp-text); }
+body [class*="_topics_"] a:hover, body [class*="_mailLine_"] a, body [class*="_fields_"] a { color: var(--tp-blue); }
+
+/* ---------- closing call-to-action bands: Toptal navy ---------- */
+body section[class*="_cta_"], body [class*="_finalCta_"] { background: var(--tp-navy); color: #fff; }
+body section[class*="_cta_"] h2, body [class*="_finalCta_"] h2 { color: #fff; }
+body [class*="_finalCta_"] [class*="_btnPrimary_"] { background: var(--tp-green); color: #fff; }
+body [class*="_finalCta_"] [class*="_btnPrimary_"]:hover { background: var(--tp-green-d); }
+body [class*="_finalCtaIcon_"] { color: var(--tp-green); }
+
+/* ---------- footer: navy, white text ---------- */
+body footer[class*="_footer_"] { background: var(--tp-navy); color: rgba(255, 255, 255, .8); padding: 48px 24px 32px; font-size: 14px; }
+body footer[class*="_footer_"] [class*="_footerEmail_"] { border-radius: 6px; border-color: rgba(255, 255, 255, .3); font-weight: 600; transform: none; }
+body footer[class*="_footer_"] [class*="_footerEmail_"]:hover { background: rgba(255, 255, 255, .08); border-color: #fff; transform: none; }
+body footer[class*="_footer_"] [class*="_footerLinksTitle_"] { font-size: 16px; font-weight: 600; padding-bottom: 12px; margin-bottom: 14px; border-bottom: 1px solid rgba(255, 255, 255, .2); }
+body footer[class*="_footer_"] [class*="_footerLinks_"] a { font-size: 14px; }
+body footer[class*="_footer_"] [class*="_footerNote_"] { color: rgba(255, 255, 255, .65); font-size: 13px; }
+
+/* ---------- landing pages ---------- */
+body [class*="_th_brand_"] [class*="_title_"] { font-size: clamp(1.75rem, 3.2vw, 2.5rem); line-height: 1.2; font-weight: 600; letter-spacing: -.01em; color: var(--tp-head); }
+body [class*="_th_brand_"] [class*="_h2_"] { font-size: clamp(1.375rem, 2.2vw, 1.75rem); font-weight: 600; letter-spacing: 0; color: var(--tp-head); }
+body [class*="_th_brand_"] [class*="_peek_"] { box-shadow: none; border-radius: 6px; }
+body [class*="_th_brand_"] [class*="_eyebrow_"], body [class*="_th_brand_"] span[class*="_num_"], body [class*="_th_brand_"] [class*="_stn_"] { color: var(--tp-blue); }
+body [class*="_th_brand_"] [class*="_st_line_"] [class*="_stn_"] { background: var(--tp-blue); color: #fff; }
+body [class*="_th_brand_"] [class*="_toc_"] a:hover { border-left-color: var(--tp-blue); }
+body [class*="_th_brand_"] [class*="_tocCta_"] { color: var(--tp-blue) !important; }
+body [class*="_th_brand_"] [class*="_dl_ticks_"] li::before, body [class*="_th_brand_"] [class*="_pb_dash_"] li::before { color: var(--tp-green); }
+body [class*="_th_brand_"] [class*="_link_"], body [class*="_th_brand_"] [class*="_related_"] a { text-underline-offset: 3px; }
+body [class*="_th_brand_"] [class*="_related_"] a:hover, body [class*="_th_brand_"] [class*="_index_"] a:hover { color: var(--tp-blue); }
+body [class*="_th_brand_"] [class*="_index_"] span { color: var(--tp-blue); }
+
+/* ---------- landing form + contact form ---------- */
+body [class*="_form_"] input, body [class*="_form_"] select, body [class*="_form_"] textarea {
+  border-radius: 6px; border-color: var(--tp-border); min-height: 48px; font-size: 16px; padding: 11px 14px; font-family: var(--tp-font);
+}
+body [class*="_form_"] textarea { min-height: 120px; }
+body [class*="_form_"] input:focus, body [class*="_form_"] select:focus, body [class*="_form_"] textarea:focus {
+  border-color: var(--tp-blue); box-shadow: 0 0 0 3px rgba(32, 78, 207, .25);
+}
+body [class*="_form_"] label { font-size: 14px; font-weight: 600; color: var(--tp-text); }
+body [class*="_form_"] button[type="submit"] {
+  background: var(--tp-green); color: #fff; border-radius: 6px; min-height: 48px; padding: 0 25px; font-weight: 600; font-size: 16px; transform: none;
+}
+body [class*="_form_"] button[type="submit"]:hover:not(:disabled) { background: var(--tp-green-d); transform: none; }
+body [class*="_again_"] { border-radius: 6px; border-color: var(--tp-border); }
+body [class*="_error_"] { border-radius: 6px; }
+
+/* ---------- mobile ---------- */
+@media (max-width: 720px) {
+  body h1 { font-size: 1.75rem !important; }
+  body h2 { font-size: 1.5rem !important; }
+  body [class*="_navbar_"] [class*="_inner_"] { padding: 0 16px; }
+}

@@ -11,6 +11,7 @@ import "@fontsource/roboto/latin-500.css";
 import "@fontsource/roboto/latin-700.css";
 import "./index.css";
 import App from "./App.jsx";
+import "./toptal-theme.css"; // keep last: Toptal theme for every page
 
 // Take manual control of scroll position so ScrollToTop (in App.jsx) is the
 // single source of truth on every navigation, including browser back/forward,
