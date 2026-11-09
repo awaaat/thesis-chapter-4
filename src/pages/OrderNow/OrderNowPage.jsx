@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { ArrowLeft, Check, Paperclip, X, Mail, Lock } from "lucide-react";
+import { ArrowLeft, Check, Paperclip, X, Mail, Lock, RotateCcw } from "lucide-react";
 import SEO from "../../components/SEO/SEO";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import {
@@ -157,6 +157,9 @@ export default function OrderNowPage() {
   }
 
   const back = () => { setBanner(""); setIdx((i) => Math.max(0, i - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); };
+
+  // Jump to step 1. Answers stay filled in and saved, so nothing is lost.
+  const toStart = () => { setBanner(""); setErrors({}); setIdx(0); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
   async function onFiles(e) {
     const picked = Array.from(e.target.files || []);
@@ -377,6 +380,9 @@ export default function OrderNowPage() {
           </button>
           {idx > 0 && (
             <button type="button" className={styles.back} onClick={back} disabled={busy}><ArrowLeft size={16} /> Back</button>
+          )}
+          {idx >= 2 && (
+            <button type="button" className={styles.back} onClick={toStart} disabled={busy || uploading}><RotateCcw size={15} /> Back to step 1</button>
           )}
         </div>
         <p className={styles.footnote}>Free quote in 24 hours. No payment until you agree. Prefer email? <a href="mailto:info@scapedatasolutions.com">info@scapedatasolutions.com</a></p>
