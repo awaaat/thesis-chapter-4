@@ -1,20 +1,22 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Check, Paperclip, X, Mail, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Check, Paperclip, X, Mail, Lock } from "lucide-react";
 import SEO from "../../components/SEO/SEO";
+import Dropdown from "../../components/Dropdown/Dropdown";
 import {
   getCatalog, getOrder, startOrder, saveOrder, submitOrder, uploadOrderFile, deleteOrderFile,
   loadToken, saveToken, clearToken, attribution,
 } from "../../services/ordersApi";
 import styles from "./OrderNowPage.module.css";
 
-const CORE_PLACEHOLDERS = {
-  name: "Your full name", email: "you@email.com", phone: "+254 700 000 000", country: "Country",
-  company: "Company / institution", topic: "Working title of your thesis or project",
+const PLACEHOLDERS = {
+  name: "Your full name", email: "you@email.com", phone: "+254 700 000 000", country: "e.g. Kenya",
+  company: "Company or institution", topic: "Working title of your thesis or project",
 };
 const INPUT_TYPE = { email: "email", phone: "tel", deadline: "date" };
 const AUTOCOMPLETE = { name: "name", email: "email", phone: "tel", country: "country-name" };
 const prettify = (k) => k.replace(/_/g, " ").replace(/^./, (c) => c.toUpperCase());
+const today = () => new Date().toISOString().slice(0, 10);
 
 export default function OrderNowPage() {
   const [params] = useSearchParams();
@@ -39,7 +41,6 @@ export default function OrderNowPage() {
   const step = steps[idx];
   const set = (k, v) => { setValues((s) => ({ ...s, [k]: v })); setErrors((e) => ({ ...e, [k]: undefined })); };
 
-  // ── boot: catalog, then resume (?resume= or saved token) or ?service= preselect ──
   useEffect(() => {
     let alive = true;
     (async () => {
@@ -89,7 +90,7 @@ export default function OrderNowPage() {
     setIdx(Math.min(o.current_step || 0, cat.steps.length - 1));
   }
 
-  // Fields of a step, as the API wants them (empty values are never sent: DateField rejects "").
+  // Empty values are never sent: the API's DateField rejects "".
   const payloadFor = useCallback((st, nextIdx) => {
     const out = {};
     (st?.fields || []).forEach((f) => {
@@ -112,7 +113,7 @@ export default function OrderNowPage() {
     (st.required || []).forEach((f) => {
       const v = values[f];
       if (!v || (typeof v === "string" && !v.trim())) {
-        miss[f] = f === "email" ? "We need your email to send the quote." : f === "name" ? "Please tell us your name." : "This is required.";
+        miss[f] = f === "email" ? "We need your email to send the quote." : f === "name" ? "Please tell us your name." : "Please choose an option.";
       }
     });
     setErrors(miss);
@@ -130,16 +131,14 @@ export default function OrderNowPage() {
     setBanner(err.message);
   }
 
-  async function next(extra = {}) {
+  async function next() {
     if (!step || busy) return;
     setBanner("");
     if (!validateStep(step)) return;
     if (step.input === "review") return finish();
     setBusy(true);
     try {
-      // `extra` lets a card click save its value in the same call (state isn't updated yet).
-      const payload = { ...payloadFor(step, idx + 1), ...extra };
-      await persist(payload);
+      await persist(payloadFor(step, idx + 1));
       setIdx((i) => Math.min(i + 1, steps.length - 1));
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) { applyApiErrors(err); } finally { setBusy(false); }
@@ -148,7 +147,7 @@ export default function OrderNowPage() {
   async function finish() {
     setBusy(true); setBanner("");
     try {
-      await persist({}); // guarantees a draft exists
+      await persist({});
       const res = await submitOrder(tokenRef.current, {});
       clearToken();
       setResult(res);
@@ -159,36 +158,21 @@ export default function OrderNowPage() {
 
   const back = () => { setBanner(""); setIdx((i) => Math.max(0, i - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
-  async function pickCard(field, value) {
-    set(field, value);
-    // Single-answer card steps advance on tap (fast, Toptal-style). Date and file steps use Continue.
-    if (step.input === "cards" && step.fields.length === 1) {
-      setBusy(true); setBanner("");
-      try {
-        await persist({ ...payloadFor(step, idx + 1), [field]: value });
-        setIdx((i) => Math.min(i + 1, steps.length - 1));
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      } catch (err) { applyApiErrors(err); } finally { setBusy(false); }
-    }
-  }
-
   async function onFiles(e) {
     const picked = Array.from(e.target.files || []);
     e.target.value = "";
     if (!picked.length) return;
     setBanner(""); setUploading(true);
     try {
-      let t = tokenRef.current;
-      if (!t) { await persist({ ...payloadFor(steps[0]) }); t = tokenRef.current; }
-      const max = catalog.limits.max_files;
+      if (!tokenRef.current) await persist({});
+      const t = tokenRef.current;
+      const { max_files: maxFiles, max_file_mb: mb } = catalog.limits;
+      let count = files.length;
       for (const f of picked) {
-        if (files.length >= max) { setBanner(`You can attach up to ${max} files.`); break; }
-        const mb = catalog.limits.max_file_mb;
+        if (count >= maxFiles) { setBanner(`You can attach up to ${maxFiles} files.`); break; }
         if (f.size > mb * 1024 * 1024) { setBanner(`${f.name} is larger than ${mb} MB. Zip it or email it to us.`); continue; }
-        try {
-          const rec = await uploadOrderFile(t, f);
-          setFiles((cur) => [...cur, rec]);
-        } catch (err) { setBanner(`${f.name}: ${err.message}`); }
+        try { const rec = await uploadOrderFile(t, f); setFiles((cur) => [...cur, rec]); count += 1; }
+        catch (err) { setBanner(`${f.name}: ${err.message}`); }
       }
     } catch (err) { setBanner(err.message); } finally { setUploading(false); }
   }
@@ -199,13 +183,9 @@ export default function OrderNowPage() {
   }
 
   const labelOf = (k) => catalog?.labels?.[k] || prettify(k);
-  const serviceLabel = useMemo(
-    () => catalog?.services.find((s) => s.slug === values.service)?.label || "",
-    [catalog, values.service],
-  );
+  const serviceLabel = useMemo(() => catalog?.services.find((s) => s.slug === values.service)?.label || "", [catalog, values.service]);
   const pct = steps.length ? Math.round(((idx + 1) / steps.length) * 100) : 0;
 
-  // ── screens ──
   const seo = (
     <SEO
       title="Place Your Order | Chapter 4 & SPSS Data Analysis Help"
@@ -216,17 +196,17 @@ export default function OrderNowPage() {
     />
   );
 
-  if (phase === "loading") return <section className={styles.section}>{seo}<p className={styles.center}>Loading your order form…</p></section>;
+  if (phase === "loading") return <section className={styles.root}>{seo}<div className={styles.wrap}><p className={styles.muted}>Loading your order form…</p></div></section>;
 
   if (phase === "error") {
     return (
-      <section className={styles.section}>{seo}
-        <div className={styles.card}>
+      <section className={styles.root}>{seo}
+        <div className={styles.wrap}>
           <h1 className={styles.title}>We couldn't load the order form</h1>
           <p className={styles.sub}>{loadError}</p>
           <div className={styles.actions}>
             <button type="button" className={styles.primary} onClick={() => window.location.reload()}>Try again</button>
-            <a className={styles.ghost} href="mailto:info@scapedatasolutions.com?subject=New%20order"><Mail size={16} /> Email us your order</a>
+            <a className={styles.secondary} href="mailto:info@scapedatasolutions.com?subject=New%20order"><Mail size={16} /> Email us your order</a>
           </div>
         </div>
       </section>
@@ -235,18 +215,19 @@ export default function OrderNowPage() {
 
   if (phase === "done") {
     return (
-      <section className={styles.section}>{seo}
-        <div className={styles.card}>
-          <div className={styles.doneIcon}><Check size={28} /></div>
-          <h1 className={styles.title}>Order received</h1>
+      <section className={styles.root}>{seo}
+        <div className={styles.wrap}>
+          <div className={styles.doneIcon}><Check size={24} /></div>
+          <h1 className={styles.title}>Thank you. Your order is in.</h1>
           <p className={styles.sub}>
             Your reference is <strong>{result?.reference}</strong>. A confirmation is on its way to {values.email || "your inbox"}.
             We reply within <strong>{catalog.promise?.reply_within || "24 hours"}</strong> with scope, timeline and price.
           </p>
-          <p className={styles.note}>Forgot a file or a detail? Just reply to the confirmation email.</p>
+          <p className={styles.muted}>Forgot a file or a detail? Just reply to the confirmation email.</p>
           <div className={styles.actions}>
-            <Link to="/" className={styles.ghost}>Back to home</Link>
-            <button type="button" className={styles.primary} onClick={() => { setValues({}); setFiles([]); setToken(""); setIdx(0); setResult(null); setResumed(false); setPhase("ready"); }}>
+            <Link to="/" className={styles.secondary}>Back to home</Link>
+            <button type="button" className={styles.primary}
+              onClick={() => { setValues({}); setFiles([]); setToken(""); setIdx(0); setResult(null); setResumed(false); setPhase("ready"); }}>
               Place another order
             </button>
           </div>
@@ -255,108 +236,85 @@ export default function OrderNowPage() {
     );
   }
 
-  const optionsFor = (st) => (st.options_from ? catalog.options[st.options_from] || [] : []);
+  const optionsOf = (st, field) => {
+    const key = field === st.fields[0] ? st.options_from : null;
+    return (key ? catalog.options[key] || [] : []).map((o) => ({ value: o, label: o }));
+  };
 
-  function renderField(f, st) {
-    const opts = st.options_from && st.fields.length > 1 && f === st.fields[0] ? optionsFor(st) : null;
-    const common = {
-      id: `f-${f}`, name: f, value: values[f] ?? "", onChange: (e) => set(f, e.target.value),
-      "aria-invalid": !!errors[f], autoComplete: AUTOCOMPLETE[f],
-    };
-    const label = labelOf(f) + ((st.required || []).includes(f) ? " *" : "");
+  function renderInput(f, st) {
+    const required = (st.required || []).includes(f);
     return (
-      <label key={f} htmlFor={`f-${f}`} className={styles.field}>
-        <span>{label}</span>
-        {opts ? (
-          <select {...common}><option value="">Select…</option>{opts.map((o) => <option key={o} value={o}>{o}</option>)}</select>
-        ) : (
-          <input {...common} type={INPUT_TYPE[f] || "text"} placeholder={CORE_PLACEHOLDERS[f] || ""}
-            min={f === "deadline" ? new Date().toISOString().slice(0, 10) : undefined} />
-        )}
-        {errors[f] && <em className={styles.err}>{errors[f]}</em>}
-      </label>
+      <div key={f} className={styles.field}>
+        <label htmlFor={`f-${f}`}>{labelOf(f)}{required ? " *" : ""}</label>
+        <input
+          id={`f-${f}`} name={f} value={values[f] ?? ""} onChange={(e) => set(f, e.target.value)}
+          type={INPUT_TYPE[f] || "text"} placeholder={PLACEHOLDERS[f] || ""} autoComplete={AUTOCOMPLETE[f]}
+          aria-invalid={!!errors[f]} min={f === "deadline" ? today() : undefined}
+        />
+        {errors[f] && <p className={styles.err}>{errors[f]}</p>}
+      </div>
     );
   }
 
   function renderBody() {
     if (step.input === "cards" || step.input === "cards+date") {
       const field = step.fields[0];
+      const dateExtra = step.input === "cards+date";
       if (field === "service") {
+        const cats = Object.fromEntries((catalog.categories || []).map((c) => [c.id, c.title]));
+        const opts = catalog.services.map((s) => ({
+          value: s.slug, label: s.label, hint: s.blurb, group: s.category === "other" ? "Not listed?" : cats[s.category] || "",
+        }));
         return (
-          <div>
-            {(catalog.categories.length ? catalog.categories : [{ id: "", title: "" }]).map((cat) => {
-              const list = catalog.services.filter((s) => (cat.id ? s.category === cat.id : true) && s.category !== "other");
-              if (!list.length) return null;
-              return (
-                <div key={cat.id || "all"} className={styles.group}>
-                  {cat.title && <h3 className={styles.groupTitle}>{cat.title}</h3>}
-                  <div className={styles.grid}>
-                    {list.map((s) => (
-                      <button type="button" key={s.slug} disabled={busy}
-                        className={`${styles.option} ${values.service === s.slug ? styles.optionOn : ""}`}
-                        onClick={() => pickCard("service", s.slug)}>
-                        <strong>{s.label}</strong><span>{s.blurb}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-            {catalog.services.some((s) => s.category === "other") && (
-              <div className={styles.grid}>
-                <button type="button" disabled={busy}
-                  className={`${styles.option} ${values.service === "other" ? styles.optionOn : ""}`}
-                  onClick={() => pickCard("service", "other")}>
-                  <strong>Something else</strong><span>Not listed? Tell us what you need.</span>
-                </button>
-              </div>
-            )}
-            {errors.service && <em className={styles.err}>{errors.service}</em>}
-          </div>
+          <Dropdown ariaLabel={step.title} value={values.service} options={opts} searchable
+            placeholder="Select a service…" error={errors.service} required
+            onChange={(v) => set("service", v)} />
         );
       }
       return (
-        <div>
-          <div className={styles.grid}>
-            {optionsFor(step).map((o) => (
-              <button type="button" key={o} disabled={busy}
-                className={`${styles.option} ${styles.optionSlim} ${values[field] === o ? styles.optionOn : ""}`}
-                onClick={() => pickCard(field, o)}>
-                <strong>{o}</strong>
-              </button>
-            ))}
-          </div>
-          {step.input === "cards+date" && (
-            <div className={styles.formStack} style={{ marginTop: 16 }}>
-              {renderField("deadline", step)}
+        <div className={styles.stack}>
+          <Dropdown ariaLabel={step.title} value={values[field]} options={optionsOf(step, field)}
+            placeholder="Select…" error={errors[field]} onChange={(v) => set(field, v)} />
+          {dateExtra && (
+            <div className={styles.field}>
+              <label htmlFor="f-deadline">Or pick an exact date</label>
+              <input id="f-deadline" type="date" min={today()} value={values.deadline ?? ""} onChange={(e) => set("deadline", e.target.value)} />
+              {errors.deadline && <p className={styles.err}>{errors.deadline}</p>}
             </div>
           )}
-          {errors[field] && <em className={styles.err}>{errors[field]}</em>}
         </div>
       );
     }
     if (step.input === "form") {
-      return <div className={styles.formStack}>{step.fields.map((f) => renderField(f, step))}</div>;
+      return <div className={styles.stack}>{step.fields.map((f) => {
+        const opts = optionsOf(step, f);
+        if (opts.length) {
+          return <Dropdown key={f} label={labelOf(f)} value={values[f]} options={opts} error={errors[f]} onChange={(v) => set(f, v)} />;
+        }
+        return renderInput(f, step);
+      })}</div>;
     }
     if (step.input === "textarea+files") {
       const exts = catalog.limits.allowed_extensions.map((e) => `.${e}`).join(",");
       return (
-        <div className={styles.formStack}>
-          <label className={styles.field} htmlFor="f-topic"><span>{labelOf("topic")}</span>
-            <input id="f-topic" value={values.topic ?? ""} onChange={(e) => set("topic", e.target.value)} placeholder={CORE_PLACEHOLDERS.topic} />
-            {errors.topic && <em className={styles.err}>{errors.topic}</em>}
-          </label>
-          <label className={styles.field} htmlFor="f-details"><span>{labelOf("details")}</span>
-            <textarea id="f-details" rows={6} value={values.details ?? ""} onChange={(e) => set("details", e.target.value)}
+        <div className={styles.stack}>
+          <div className={styles.field}>
+            <label htmlFor="f-topic">{labelOf("topic")}</label>
+            <input id="f-topic" value={values.topic ?? ""} onChange={(e) => set("topic", e.target.value)} placeholder={PLACEHOLDERS.topic} />
+            {errors.topic && <p className={styles.err}>{errors.topic}</p>}
+          </div>
+          <div className={styles.field}>
+            <label htmlFor="f-details">{labelOf("details")}</label>
+            <textarea id="f-details" rows={5} value={values.details ?? ""} onChange={(e) => set("details", e.target.value)}
               placeholder="Your objectives, sample size, what you've done so far, what your supervisor asked for…" />
-            {errors.details && <em className={styles.err}>{errors.details}</em>}
-          </label>
-          <div className={styles.upload}>
+            {errors.details && <p className={styles.err}>{errors.details}</p>}
+          </div>
+          <div>
             <label className={styles.uploadBtn}>
-              <Paperclip size={16} /> {uploading ? "Uploading…" : "Attach your dataset or files"}
+              <Paperclip size={16} /> {uploading ? "Uploading…" : "Attach dataset or files"}
               <input type="file" multiple hidden accept={exts} onChange={onFiles} disabled={uploading} />
             </label>
-            <span className={styles.note}>SPSS, Excel, CSV, Stata, PDF, Word… up to {catalog.limits.max_file_mb} MB each.</span>
+            <p className={styles.hint}>SPSS, Excel, CSV, Stata, PDF, Word and more. Up to {catalog.limits.max_file_mb} MB each.</p>
             {files.length > 0 && (
               <ul className={styles.files}>
                 {files.map((f) => (
@@ -372,10 +330,10 @@ export default function OrderNowPage() {
     }
     if (step.input === "review") {
       const rows = [["Service", values.service === "other" ? "Something else" : serviceLabel]];
-      const skip = new Set(["service"]);
+      const seen = new Set(["service"]);
       steps.forEach((s) => s.fields.forEach((f) => {
-        if (skip.has(f) || values[f] === undefined || values[f] === "") return;
-        skip.add(f);
+        if (seen.has(f) || values[f] === undefined || values[f] === "") return;
+        seen.add(f);
         rows.push([labelOf(f), Array.isArray(values[f]) ? values[f].join(", ") : String(values[f])]);
       }));
       if (files.length) rows.push(["Files", files.map((f) => f.original_name).join(", ")]);
@@ -384,7 +342,7 @@ export default function OrderNowPage() {
           <dl className={styles.review}>
             {rows.map(([k, v]) => (<div key={k}><dt>{k}</dt><dd>{v || "—"}</dd></div>))}
           </dl>
-          <p className={styles.trust}><ShieldCheck size={16} /> You pay nothing until you agree to our quote. Files stay confidential.</p>
+          <p className={styles.secure}><Lock size={14} /> You pay nothing until you agree to our quote. Your files stay confidential.</p>
         </div>
       );
     }
@@ -392,37 +350,36 @@ export default function OrderNowPage() {
   }
 
   const isReview = step.input === "review";
-  const isCardsOnly = step.input === "cards" && step.fields.length === 1;
-  const optional = !(step.required || []).length && step.input !== "review";
+  const intro = idx === 0 && !resumed;
 
   return (
-    <section className={styles.section}>
+    <section className={styles.root}>
       {seo}
-      <div className={styles.card}>
-        <div className={styles.progress} aria-label={`Step ${idx + 1} of ${steps.length}`}>
-          <div className={styles.bar}><div style={{ width: `${pct}%` }} /></div>
-          <span>Step {idx + 1} of {steps.length}</span>
-        </div>
-        {resumed && idx > 0 && <p className={styles.resumed}>Welcome back. Your answers are saved.</p>}
+      <div className={styles.progress}><div style={{ width: `${pct}%` }} /></div>
+      <div className={styles.wrap}>
+        {intro && (
+          <p className={styles.intro}>
+            Thanks for your interest in working with Scape Data Solutions! Before we get started, we'd like to ask a few
+            questions to better understand what you need.
+          </p>
+        )}
+        {resumed && idx > 0 && <p className={styles.intro}>Welcome back. Your answers are saved.</p>}
+        <p className={styles.eyebrow}>Step {idx + 1} of {steps.length}</p>
         <h1 className={styles.title}>{step.title}</h1>
         {step.subtitle && <p className={styles.sub}>{step.subtitle}</p>}
         {banner && <div className={styles.banner} role="alert">{banner}</div>}
 
-        {renderBody()}
+        <div className={styles.body}>{renderBody()}</div>
 
         <div className={styles.actions}>
-          {idx > 0 ? <button type="button" className={styles.ghost} onClick={back} disabled={busy}><ArrowLeft size={16} /> Back</button> : <span />}
-          {!isCardsOnly && (
-            <button type="button" className={styles.primary} onClick={() => next()} disabled={busy || uploading}>
-              {busy ? "Saving…" : isReview ? "Place my order" : optional ? "Continue" : "Next"}
-              {!busy && !isReview && <ArrowRight size={16} />}
-            </button>
-          )}
-          {isCardsOnly && optional && (
-            <button type="button" className={styles.ghost} onClick={() => next()} disabled={busy}>Skip <ArrowRight size={16} /></button>
+          <button type="button" className={styles.primary} onClick={next} disabled={busy || uploading}>
+            {busy ? "Saving…" : isReview ? "Place my order" : "Continue"}
+          </button>
+          {idx > 0 && (
+            <button type="button" className={styles.back} onClick={back} disabled={busy}><ArrowLeft size={16} /> Back</button>
           )}
         </div>
-        <p className={styles.footnote}>Free quote in 24 hours · No payment until you agree · Prefer email? <a href="mailto:info@scapedatasolutions.com">info@scapedatasolutions.com</a></p>
+        <p className={styles.footnote}>Free quote in 24 hours. No payment until you agree. Prefer email? <a href="mailto:info@scapedatasolutions.com">info@scapedatasolutions.com</a></p>
       </div>
     </section>
   );
