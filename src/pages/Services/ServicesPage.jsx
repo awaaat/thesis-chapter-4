@@ -5,6 +5,7 @@ import {
   TrendingUp, GitBranch, Layers, Network,
   CheckCircle, Users, Clock, Award,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import SEO from "../../components/SEO/SEO";
 import styles from "./ServicesPage.module.css";
 import {
@@ -24,8 +25,6 @@ import {
   IconWriteup, IconDecision, IconSoftware, IconScope, IconDefense, IconFAQ,
 } from "./ServiceIllustrations";
 
-const CONTACT_URL = "https://www.scapedatasolutions.com/contact";
-const PORTAL_URL = "https://portal.scapedatasolutions.com/";
 const SITE_URL = "https://www.scapedatasolutions.com";
 
 /* ---------------------------------------------------------------- */
@@ -424,12 +423,12 @@ export default function ServicesPage() {
                 document every decision so it can be defended in front of a committee.
               </p>
               <div className={styles.heroBtnRow}>
-                <a href={PORTAL_URL} target="_blank" rel="noopener noreferrer" className={styles.btnPrimary}>
+                <Link to="/order-now" className={styles.btnPrimary}>
                   Start My Order <ArrowRight size={16} />
-                </a>
-                <a href={CONTACT_URL} target="_blank" rel="noopener noreferrer" className={styles.btnSecondary}>
+                </Link>
+                <Link to="/order-now" className={styles.btnSecondary}>
                   Ask About My Study
-                </a>
+                </Link>
               </div>
 
               <dl className={styles.heroStats}>
@@ -760,9 +759,9 @@ export default function ServicesPage() {
                     <li key={inc}>{inc}</li>
                   ))}
                 </ul>
-                <a href={CONTACT_URL} target="_blank" rel="noopener noreferrer" className={s.featured ? styles.btnPrimary : styles.btnSecondary}>
+                <Link to="/order-now" className={s.featured ? styles.btnPrimary : styles.btnSecondary}>
                   Ask About This Option
-                </a>
+                </Link>
               </motion.article>
             ))}
           </motion.div>
@@ -837,8 +836,8 @@ export default function ServicesPage() {
         <h2>Not sure which service you need?</h2>
         <p>Send your research questions and any data you already have, and we'll tell you exactly what's involved.</p>
         <div className={styles.heroBtnRow} style={{ justifyContent: "center" }}>
-          <a href={PORTAL_URL} target="_blank" rel="noopener noreferrer" className={styles.btnPrimary}>Start My Order <ArrowRight size={16} /></a>
-          <a href={CONTACT_URL} target="_blank" rel="noopener noreferrer" className={styles.btnSecondaryLight}>Contact Us</a>
+          <Link to="/order-now" className={styles.btnPrimary}>Start My Order <ArrowRight size={16} /></Link>
+          <Link to="/order-now" className={styles.btnSecondaryLight}>Contact Us</Link>
         </div>
       </motion.section>
     </div>

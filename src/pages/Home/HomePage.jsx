@@ -4,7 +4,6 @@ import SEO from "../../components/SEO/SEO";
 import { landingPages, CATEGORIES } from "../Landing/landingData";
 import styles from "./HomePage.module.css";
 
-const PORTAL_URL = "https://portal.scapedatasolutions.com/";
 const EMAIL = "info@scapedatasolutions.com";
 
 const INCLUDED = ["Cleaned dataset and syntax file", "Assumption checks before every test", "APA 7 tables and figures", "Plain-language interpretation"];
@@ -94,10 +93,10 @@ export default function HomePage() {
               you can actually defend.
             </p>
             <div className={styles.btnRow}>
-              <a href={PORTAL_URL} target="_blank" rel="noopener noreferrer" className={styles.btnPrimary}>
+              <Link to="/order-now" className={styles.btnPrimary}>
                 Start my order <ArrowRight size={16} />
-              </a>
-              <Link to="/contact" className={styles.btnOutline}>Get a free quote</Link>
+              </Link>
+              <Link to="/order-now" className={styles.btnOutline}>Get a free quote</Link>
             </div>
             <ul className={styles.ticks}>
               {INCLUDED.map((i) => (<li key={i}><Check size={16} aria-hidden="true" />{i}</li>))}
@@ -261,8 +260,8 @@ export default function HomePage() {
           <h2>Send us your dataset and your deadline</h2>
           <p>We reply within 24 hours with a free quote, before you pay anything.</p>
           <div className={styles.btnRow} style={{ justifyContent: "center" }}>
-            <Link to="/contact" className={styles.btnWhite}>Get a free quote</Link>
-            <a href={PORTAL_URL} target="_blank" rel="noopener noreferrer" className={styles.btnGhost}>Start my order</a>
+            <Link to="/order-now" className={styles.btnWhite}>Get a free quote</Link>
+            <Link to="/order-now" className={styles.btnGhost}>Start my order</Link>
           </div>
         </div>
       </section>
